@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap');
+
+  :root {
+    --bg: #0d0f14;
+    --surface: #13161e;
+    --surface2: #1a1e28;
+    --border: rgba(255,255,255,0.07);
+    --green: #22c55e;
+    --blue: #3b82f6;
+    --yellow: #f59e0b;
+    --red: #ef4444;
+    --text: #f1f5f9;
+    --text-muted: #94a3b8;
+    --text-dim: #64748b;
+    --accent: #818cf8;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    line-height: 1.5;
+    padding: 20px;
+    min-width: 1100px;
+  }
+
+  .header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 24px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(99,102,241,0.15);
+    border: 1px solid rgba(99,102,241,0.3);
+    color: var(--accent);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 4px;
+    margin-bottom: 10px;
+  }
+
+  h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: 26px;
+    font-weight: 800;
+    color: var(--text);
+    letter-spacing: -0.5px;
+    line-height: 1.2;
+  }
+
+  h1 span { color: var(--accent); }
+  .subtitle { color: var(--text-muted); font-size: 13px; margin-top: 4px; }
+
+  .header-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+  }
+
+  .motto {
+    background: linear-gradient(135deg, rgba(99,102,241,0.15), rgba(59,130,246,0.1));
+    border: 1px solid rgba(99,102,241,0.25);
+    border-radius: 8px;
+    padding: 10px 16px;
+    text-align: right;
+    max-width: 300px;
+  }
+
+  .motto p { font-size: 12px; color: var(--text-muted); font-style: italic; }
+  .motto strong { font-size: 13px; color: var(--accent); font-family: 'Syne', sans-serif; }
+
+  .disclaimer {
+    background: rgba(245,158,11,0.07);
+    border: 1px solid rgba(245,158,11,0.15);
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-size: 10px;
+    color: rgba(245,158,11,0.7);
+    font-style: italic;
+    max-width: 320px;
+    text-align: right;
+  }
+
+  /* GRID */
+  .grid {
+    display: grid;
+    grid-template-columns: 300px 1fr 1fr;
+    gap: 12px;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+  }
+
+  .card-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .card-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* ===== VRAIE PYRAMIDE ===== */
+  .pyramid-card {
+    grid-row: 1 / 4;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .pyramid-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    margin-bottom: 14px;
+  }
+
+  /* Chaque niveau est un trapèze via clip-path, largeur croissante vers le bas */
+  .pyr-level {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 4px;
+    transition: filter 0.2s, transform 0.2s;
+    cursor: default;
+    padding: 0 14px;
+  }
+
+  .pyr-level:hover { filter: brightness(1.15); transform: scaleX(1.01); }
+
+  /* Largeurs croissantes = vraie forme pyramide */
+  .pyr-top    { width: 42%;  min-height: 52px; background: linear-gradient(135deg, rgba(239,68,68,0.25), rgba(239,68,68,0.12)); border: 1px solid rgba(239,68,68,0.4); }
+  .pyr-upper  { width: 62%;  min-height: 68px; background: linear-gradient(135deg, rgba(245,158,11,0.25), rgba(245,158,11,0.12)); border: 1px solid rgba(245,158,11,0.4); }
+  .pyr-mid    { width: 80%;  min-height: 80px; background: linear-gradient(135deg, rgba(59,130,246,0.25), rgba(59,130,246,0.12)); border: 1px solid rgba(59,130,246,0.4); }
+  .pyr-base   { width: 100%; min-height: 90px; background: linear-gradient(135deg, rgba(34,197,94,0.25), rgba(34,197,94,0.12)); border: 1px solid rgba(34,197,94,0.4); }
+
+  /* Connecteurs triangulaires entre niveaux pour visuel pyramide continu */
+  .pyr-connector {
+    width: 0;
+    height: 0;
+    border-left: solid transparent;
+    border-right: solid transparent;
+    border-top: 6px solid;
+    opacity: 0.3;
+  }
+
+  .pyr-connector.red   { border-left-width: 53px; border-right-width: 53px; border-top-color: var(--red); }
+  .pyr-connector.yellow{ border-left-width: 78px; border-right-width: 78px; border-top-color: var(--yellow); }
+  .pyr-connector.blue  { border-left-width: 100px; border-right-width: 100px; border-top-color: var(--blue); }
+
+  .pyr-left { flex: 1; }
+
+  .pyr-label {
+    font-family: 'Syne', sans-serif;
+    font-size: 11.5px;
+    font-weight: 700;
+    margin-bottom: 3px;
+  }
+
+  .pyr-top .pyr-label    { color: var(--red); }
+  .pyr-upper .pyr-label  { color: var(--yellow); }
+  .pyr-mid .pyr-label    { color: var(--blue); }
+  .pyr-base .pyr-label   { color: var(--green); }
+
+  .pyr-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3px;
+    margin-top: 3px;
+  }
+
+  .pyr-tag {
+    font-size: 9.5px;
+    padding: 2px 6px;
+    border-radius: 3px;
+    color: var(--text-muted);
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .pyr-insight {
+    font-size: 9.5px;
+    color: var(--text-dim);
+    font-style: italic;
+    margin-top: 3px;
+    line-height: 1.3;
+  }
+
+  .pyr-pct {
+    font-size: 20px;
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    flex-shrink: 0;
+    margin-left: 8px;
+  }
+
+  /* EINSTEIN QUOTE */
+  .einstein-quote {
+    background: linear-gradient(135deg, rgba(245,158,11,0.1), rgba(251,191,36,0.05));
+    border: 1px solid rgba(245,158,11,0.3);
+    border-left: 3px solid var(--yellow);
+    border-radius: 6px;
+    padding: 10px 13px;
+    margin-bottom: 12px;
+  }
+
+  .einstein-quote .quote-text {
+    font-size: 11.5px;
+    color: var(--text-muted);
+    font-style: italic;
+    line-height: 1.5;
+    margin-bottom: 4px;
+  }
+
+  .einstein-quote .quote-text em { color: var(--yellow); font-style: normal; font-weight: 600; }
+
+  .einstein-quote .quote-author {
+    font-size: 10px;
+    color: var(--text-dim);
+    text-align: right;
+  }
+
+  /* EXEMPLES CONCRETS */
+  .examples-block {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    padding: 10px 12px;
+  }
+
+  .examples-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 8px;
+  }
+
+  .example-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 5px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+
+  .example-row:last-child { border-bottom: none; }
+
+  .example-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 2px;
+    flex-shrink: 0;
+    margin-top: 3px;
+  }
+
+  .example-body { flex: 1; }
+
+  .example-label {
+    font-size: 10.5px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 1px;
+  }
+
+  .example-detail { font-size: 10px; color: var(--text-dim); line-height: 1.3; }
+
+  /* === AUTRES CARDS inchangées === */
+
+  .alloc-card { grid-column: 2; grid-row: 1; }
+
+  .alloc-inner { display: flex; align-items: center; gap: 20px; }
+
+  .donut-wrap { position: relative; width: 120px; height: 120px; flex-shrink: 0; }
+  .donut-wrap svg { width: 120px; height: 120px; transform: rotate(-90deg); }
+
+  .donut-center {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    font-family: 'Syne', sans-serif; text-align: center;
+  }
+  .donut-center span { font-size: 10px; color: var(--text-dim); }
+  .donut-center strong { font-size: 16px; color: var(--text); font-weight: 800; }
+
+  .alloc-legend { flex: 1; display: flex; flex-direction: column; gap: 6px; }
+
+  .legend-row { display: flex; align-items: center; gap: 8px; font-size: 11.5px; }
+  .legend-dot { width: 8px; height: 8px; border-radius: 2px; flex-shrink: 0; }
+  .legend-label { color: var(--text-muted); flex: 1; }
+  .legend-pct { font-weight: 700; font-family: 'Syne', sans-serif; color: var(--text); }
+
+  .profiles { display: flex; gap: 8px; margin-top: 10px; }
+  .profile-pill { flex: 1; padding: 6px 10px; border-radius: 6px; font-size: 10px; line-height: 1.4; }
+  .profile-pill.agg { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.2); }
+  .profile-pill.cons { background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.2); }
+  .profile-pill strong { display: block; font-family: 'Syne', sans-serif; font-size: 10px; margin-bottom: 2px; }
+  .profile-pill.agg strong { color: var(--red); }
+  .profile-pill.cons strong { color: var(--green); }
+  .profile-pill span { color: var(--text-dim); }
+
+  .exec-card { grid-column: 3; grid-row: 1; }
+  .exec-items { display: flex; flex-direction: column; gap: 8px; }
+  .exec-item { background: var(--surface2); border: 1px solid var(--border); border-radius: 6px; padding: 8px 10px; display: flex; align-items: flex-start; gap: 10px; }
+  .exec-icon { width: 28px; height: 28px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
+  .exec-body strong { font-family: 'Syne', sans-serif; font-size: 12px; color: var(--text); display: block; }
+  .exec-body span { font-size: 10.5px; color: var(--text-dim); }
+  .golden-rule { margin-top: 8px; background: linear-gradient(135deg, rgba(245,158,11,0.12), rgba(251,191,36,0.06)); border: 1px solid rgba(245,158,11,0.25); border-radius: 6px; padding: 8px 12px; font-size: 11.5px; color: var(--yellow); font-family: 'Syne', sans-serif; font-weight: 600; text-align: center; }
+
+  .immo-card { grid-column: 2; grid-row: 2; }
+  .immo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .immo-col { border-radius: 7px; padding: 10px 12px; }
+  .immo-rp { background: rgba(34,197,94,0.07); border: 1px solid rgba(34,197,94,0.15); }
+  .immo-loc { background: rgba(59,130,246,0.07); border: 1px solid rgba(59,130,246,0.15); }
+  .immo-col-title { font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 700; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+  .immo-rp .immo-col-title { color: var(--green); }
+  .immo-loc .immo-col-title { color: var(--blue); }
+  .immo-list { list-style: none; display: flex; flex-direction: column; gap: 3px; }
+  .immo-list li { font-size: 10.5px; color: var(--text-muted); display: flex; align-items: flex-start; gap: 5px; line-height: 1.4; }
+  .immo-list li.pro::before { content: '✓'; color: var(--green); flex-shrink: 0; margin-top: 1px; }
+  .immo-list li.con::before { content: '✗'; color: var(--red); flex-shrink: 0; margin-top: 1px; }
+  .immo-verdict { grid-column: 1 / 3; background: var(--surface2); border: 1px solid var(--border); border-radius: 6px; padding: 8px 12px; font-size: 11px; color: var(--text-muted); text-align: center; font-style: italic; }
+  .immo-verdict strong { color: var(--accent); }
+
+  .fiscal-card { grid-column: 3; grid-row: 2; }
+  .fiscal-tabs { display: flex; flex-direction: column; gap: 6px; }
+  .fiscal-tab { border-radius: 6px; padding: 8px 10px; }
+  .fiscal-av { background: rgba(129,140,248,0.08); border: 1px solid rgba(129,140,248,0.2); }
+  .fiscal-pea { background: rgba(59,130,246,0.08); border: 1px solid rgba(59,130,246,0.2); }
+  .fiscal-per { background: rgba(245,158,11,0.08); border: 1px solid rgba(245,158,11,0.2); }
+  .fiscal-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
+  .fiscal-name { font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 700; }
+  .fiscal-av .fiscal-name { color: var(--accent); }
+  .fiscal-pea .fiscal-name { color: var(--blue); }
+  .fiscal-per .fiscal-name { color: var(--yellow); }
+  .fiscal-badge { font-size: 9px; padding: 2px 7px; border-radius: 10px; font-weight: 600; letter-spacing: 0.5px; }
+  .fiscal-av .fiscal-badge { background: rgba(129,140,248,0.2); color: var(--accent); }
+  .fiscal-pea .fiscal-badge { background: rgba(59,130,246,0.2); color: var(--blue); }
+  .fiscal-per .fiscal-badge { background: rgba(245,158,11,0.2); color: var(--yellow); }
+  .fiscal-desc { font-size: 10.5px; color: var(--text-dim); line-height: 1.4; }
+  .fiscal-pros { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 4px; }
+  .fiscal-pro-tag { font-size: 9.5px; padding: 2px 6px; border-radius: 3px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.07); color: var(--text-muted); }
+
+  .errors-card { grid-column: 2 / 4; grid-row: 3; }
+  .errors-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+  .error-item { background: rgba(239,68,68,0.07); border: 1px solid rgba(239,68,68,0.15); border-radius: 6px; padding: 8px 10px; display: flex; flex-direction: column; gap: 4px; }
+  .error-icon { font-size: 16px; }
+  .error-text { font-size: 10.5px; color: var(--text-muted); line-height: 1.35; }
+
+  .roadmap-card { grid-column: 1 / 4; }
+  .roadmap-track { position: relative; display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; }
+  .roadmap-track::before { content: ''; position: absolute; top: 16px; left: 5%; right: 5%; height: 2px; background: linear-gradient(90deg, var(--green), var(--blue), var(--accent)); z-index: 0; }
+  .roadmap-step { position: relative; z-index: 1; text-align: center; padding: 0 10px; }
+  .roadmap-dot { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 800; margin: 0 auto 8px; position: relative; }
+  .step-1 .roadmap-dot { background: rgba(34,197,94,0.2); border: 2px solid var(--green); color: var(--green); }
+  .step-2 .roadmap-dot { background: rgba(59,130,246,0.2); border: 2px solid var(--blue); color: var(--blue); }
+  .step-3 .roadmap-dot { background: rgba(129,140,248,0.2); border: 2px solid var(--accent); color: var(--accent); }
+  .roadmap-period { font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; margin-bottom: 6px; }
+  .step-1 .roadmap-period { color: var(--green); }
+  .step-2 .roadmap-period { color: var(--blue); }
+  .step-3 .roadmap-period { color: var(--accent); }
+  .roadmap-phase { font-size: 11px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+  .roadmap-items { list-style: none; display: flex; flex-direction: column; gap: 3px; }
+  .roadmap-items li { font-size: 10.5px; color: var(--text-dim); display: flex; align-items: flex-start; gap: 4px; text-align: left; justify-content: center; }
+  .roadmap-items li::before { content: '→'; flex-shrink: 0; opacity: 0.5; }
+
+  .footer { margin-top: 14px; display: flex; align-items: center; justify-content: space-between; padding-top: 12px; border-top: 1px solid var(--border); }
+  .footer-note { font-size: 9.5px; color: var(--text-dim); font-style: italic; }
+  .footer-date { font-size: 9.5px; color: var(--text-dim); }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-left">
+    <div class="tag">📊 Cheatsheet Patrimoine · 25–35 ans · France</div>
+    <h1>Construire un patrimoine <span>intelligent</span></h1>
+    <p class="subtitle">Pyramide d'investissement · Immobilier · Optimisation fiscale</p>
+  </div>
+  <div class="header-right">
+    <div class="motto">
+      <p>Règle fondamentale</p>
+      <strong>"Ton allocation compte plus que tes choix individuels."</strong>
+    </div>
+    <div class="disclaimer">⚠️ À titre informatif uniquement — pas un conseil en investissement. Consultez un CGP pour votre situation.</div>
+  </div>
+</div>
+
+<div class="grid">
+
+  <!-- PYRAMIDE COLONNE GAUCHE -->
+  <div class="card pyramid-card">
+    <div class="card-title">🔺 Pyramide d'investissement</div>
+
+    <!-- VRAIE PYRAMIDE : sommet petit → base large -->
+    <div class="pyramid-container">
+
+      <!-- SOMMET : Alpha / Asymétrie -->
+      <div class="pyr-level pyr-top">
+        <div class="pyr-left">
+          <div class="pyr-label">🟥 Alpha / Asymétrie</div>
+          <div class="pyr-items">
+            <span class="pyr-tag">Crypto</span>
+            <span class="pyr-tag">Private Equity</span>
+            <span class="pyr-tag">Startups</span>
+          </div>
+          <div class="pyr-insight">→ x5/x10 possible · forte probabilité de perte</div>
+        </div>
+        <div class="pyr-pct" style="color:var(--red)">5–15%</div>
+      </div>
+
+      <div class="pyr-connector red"></div>
+
+      <!-- NIVEAU 3 : Croissance cœur -->
+      <div class="pyr-level pyr-upper">
+        <div class="pyr-left">
+          <div class="pyr-label">🟨 Croissance cœur</div>
+          <div class="pyr-items">
+            <span class="pyr-tag">MSCI World ETF</span>
+            <span class="pyr-tag">ACWI</span>
+            <span class="pyr-tag">ETF US/EU/EM</span>
+          </div>
+          <div class="pyr-insight">→ Richesse LT · -30/50% possible en crise</div>
+        </div>
+        <div class="pyr-pct" style="color:var(--yellow)">40–60%</div>
+      </div>
+
+      <div class="pyr-connector yellow"></div>
+
+      <!-- NIVEAU 2 : Stabilisation -->
+      <div class="pyr-level pyr-mid">
+        <div class="pyr-left">
+          <div class="pyr-label">🟦 Stabilisation</div>
+          <div class="pyr-items">
+            <span class="pyr-tag">ETF Obligations</span>
+            <span class="pyr-tag">AV fonds €</span>
+            <span class="pyr-tag">Low Volatility</span>
+          </div>
+          <div class="pyr-insight">→ Amortisseur de volatilité · faible drawdown</div>
+        </div>
+        <div class="pyr-pct" style="color:var(--blue)">15–30%</div>
+      </div>
+
+      <div class="pyr-connector blue"></div>
+
+      <!-- BASE : Sécurité -->
+      <div class="pyr-level pyr-base">
+        <div class="pyr-left">
+          <div class="pyr-label">🟩 Base / Optionalité</div>
+          <div class="pyr-items">
+            <span class="pyr-tag">Livret A / LDDS</span>
+            <span class="pyr-tag">Fonds urgence</span>
+            <span class="pyr-tag">Monétaire</span>
+          </div>
+          <div class="pyr-insight">→ 3–6 mois de dépenses · rend. réel souvent négatif</div>
+        </div>
+        <div class="pyr-pct" style="color:var(--green)">5–15%</div>
+      </div>
+
+    </div>
+
+    <!-- CITATION EINSTEIN -->
+    <div class="einstein-quote">
+      <div class="quote-text">
+        "Les intérêts composés sont <em>la huitième merveille du monde</em>. Celui qui les comprend les gagne ; celui qui ne les comprend pas les paie."
+      </div>
+      <div class="quote-author">— Citation attribuée à Albert Einstein ⚠️ paternité non formellement établie</div>
+    </div>
+
+    <!-- EXEMPLES CONCRETS -->
+    <div class="examples-block">
+      <div class="examples-title">💡 Exemples concrets d'intérêts composés</div>
+
+      <div class="example-row">
+        <div class="example-dot" style="background:var(--yellow)"></div>
+        <div class="example-body">
+          <div class="example-label">200€/mois pendant 20 ans à 7%/an</div>
+          <div class="example-detail">→ Capital investi : 48 000€ · Valeur finale : ~104 000€ (+116%)</div>
+        </div>
+      </div>
+
+      <div class="example-row">
+        <div class="example-dot" style="background:var(--blue)"></div>
+        <div class="example-body">
+          <div class="example-label">Commencer à 25 ans vs 35 ans</div>
+          <div class="example-detail">→ 10 ans de retard = patrimoine final ~2x plus faible à 65 ans</div>
+        </div>
+      </div>
+
+      <div class="example-row">
+        <div class="example-dot" style="background:var(--green)"></div>
+        <div class="example-body">
+          <div class="example-label">Règle des 72</div>
+          <div class="example-detail">→ 72 ÷ taux de rendement = années pour doubler le capital<br>Ex : 72 ÷ 8% = ~9 ans pour doubler</div>
+        </div>
+      </div>
+
+      <div class="example-row" style="border:none">
+        <div class="example-dot" style="background:var(--red)"></div>
+        <div class="example-body">
+          <div class="example-label">L'ennemi des intérêts composés</div>
+          <div class="example-detail">→ Frais de gestion 2%/an sur 30 ans = -40% du capital final</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ALLOCATION -->
+  <div class="card alloc-card">
+    <div class="card-title">🥧 Allocation type 25–35 ans</div>
+    <div class="alloc-inner">
+      <div class="donut-wrap">
+        <svg viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="18" cy="18" r="15.9155" fill="none" stroke="#f59e0b" stroke-width="3.5" stroke-dasharray="50 50" stroke-dashoffset="0"/>
+          <circle cx="18" cy="18" r="15.9155" fill="none" stroke="#3b82f6" stroke-width="3.5" stroke-dasharray="20 80" stroke-dashoffset="-50"/>
+          <circle cx="18" cy="18" r="15.9155" fill="none" stroke="#818cf8" stroke-width="3.5" stroke-dasharray="10 90" stroke-dashoffset="-70"/>
+          <circle cx="18" cy="18" r="15.9155" fill="none" stroke="#ef4444" stroke-width="3.5" stroke-dasharray="10 90" stroke-dashoffset="-80"/>
+          <circle cx="18" cy="18" r="15.9155" fill="none" stroke="#22c55e" stroke-width="3.5" stroke-dasharray="10 90" stroke-dashoffset="-90"/>
+        </svg>
+        <div class="donut-center"><span>Allocation</span><strong>cœur</strong></div>
+      </div>
+      <div>
+        <div class="alloc-legend">
+          <div class="legend-row"><div class="legend-dot" style="background:var(--yellow)"></div><span class="legend-label">Actions (ETF monde)</span><span class="legend-pct" style="color:var(--yellow)">50%</span></div>
+          <div class="legend-row"><div class="legend-dot" style="background:var(--blue)"></div><span class="legend-label">Stabilisation</span><span class="legend-pct" style="color:var(--blue)">20%</span></div>
+          <div class="legend-row"><div class="legend-dot" style="background:var(--accent)"></div><span class="legend-label">Immobilier</span><span class="legend-pct" style="color:var(--accent)">10%</span></div>
+          <div class="legend-row"><div class="legend-dot" style="background:var(--red)"></div><span class="legend-label">Opportunités</span><span class="legend-pct" style="color:var(--red)">10%</span></div>
+          <div class="legend-row"><div class="legend-dot" style="background:var(--green)"></div><span class="legend-label">Sécurité</span><span class="legend-pct" style="color:var(--green)">10%</span></div>
+        </div>
+        <div class="profiles">
+          <div class="profile-pill agg"><strong>🔥 Agressif</strong><span>↑ Actions + Crypto</span></div>
+          <div class="profile-pill cons"><strong>🛡 Prudent</strong><span>↑ Obligations + AV</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EXECUTION -->
+  <div class="card exec-card">
+    <div class="card-title">🔁 Stratégie d'exécution</div>
+    <div class="exec-items">
+      <div class="exec-item">
+        <div class="exec-icon" style="background:rgba(34,197,94,0.12)">📅</div>
+        <div class="exec-body">
+          <strong>DCA — Dollar Cost Averaging</strong>
+          <span>Investissement régulier (mensuel) · lisse le risque d'entrée · automatisable</span>
+        </div>
+      </div>
+      <div class="exec-item">
+        <div class="exec-icon" style="background:rgba(59,130,246,0.12)">💰</div>
+        <div class="exec-body">
+          <strong>Lump Sum</strong>
+          <span>Si capital important disponible · historiquement supérieur au DCA sur marchés haussiers</span>
+        </div>
+      </div>
+      <div class="exec-item">
+        <div class="exec-icon" style="background:rgba(245,158,11,0.12)">⚖️</div>
+        <div class="exec-body">
+          <strong>Rééquilibrage annuel</strong>
+          <span>Réallouer vers cibles initiales · discipline + réduction du biais émotionnel</span>
+        </div>
+      </div>
+    </div>
+    <div class="golden-rule">⏳ "Time in the market > timing the market"</div>
+  </div>
+
+  <!-- IMMOBILIER -->
+  <div class="card immo-card">
+    <div class="card-title">🏠 Résidence principale vs Locatif</div>
+    <div class="immo-grid">
+      <div class="immo-col immo-rp">
+        <div class="immo-col-title">🏡 Résidence principale</div>
+        <ul class="immo-list">
+          <li class="pro">Exonération plus-value (France)</li>
+          <li class="pro">Effet de levier bancaire</li>
+          <li class="pro">"Loyer à soi-même" · stabilité</li>
+          <li class="con">Faible rendement réel</li>
+          <li class="con">Capital immobilisé</li>
+          <li class="con">Coûts notaire + entretien</li>
+        </ul>
+        <div style="margin-top:6px;font-size:10px;color:var(--text-dim);font-style:italic">→ Profil : aversion au risque / stabilité</div>
+      </div>
+      <div class="immo-col immo-loc">
+        <div class="immo-col-title">🏢 Locatif</div>
+        <ul class="immo-list">
+          <li class="pro">Revenus passifs + cash-flow</li>
+          <li class="pro">Levier bancaire fort</li>
+          <li class="pro">Optimisation fiscale possible</li>
+          <li class="con">Risque vacance locative</li>
+          <li class="con">Fiscalité lourde sans stratégie</li>
+          <li class="con">Gestion active requise</li>
+        </ul>
+        <div style="margin-top:6px;font-size:10px;color:var(--text-dim);font-style:italic">→ Profil : investisseur actif / discipliné</div>
+      </div>
+      <div class="immo-verdict">
+        <strong>RP = choix de vie</strong> · <strong>Locatif = choix d'investissement</strong> — les deux se complètent selon votre horizon et objectifs.
+      </div>
+    </div>
+  </div>
+
+  <!-- FISCALITE -->
+  <div class="card fiscal-card">
+    <div class="card-title">💰 Enveloppes fiscales prioritaires</div>
+    <div class="fiscal-tabs">
+      <div class="fiscal-tab fiscal-av">
+        <div class="fiscal-head">
+          <div class="fiscal-name">Assurance-Vie</div>
+          <div class="fiscal-badge">PILIER LONG TERME</div>
+        </div>
+        <div class="fiscal-desc">Fiscalité allégée après 8 ans · large choix (ETF via UC, fonds €) · flexible et transmissible</div>
+        <div class="fiscal-pros">
+          <span class="fiscal-pro-tag">Abattement 4 600€ / 9 200€</span>
+          <span class="fiscal-pro-tag">Transmission optimisée</span>
+          <span class="fiscal-pro-tag">ETF accessibles</span>
+        </div>
+      </div>
+      <div class="fiscal-tab fiscal-pea">
+        <div class="fiscal-head">
+          <div class="fiscal-name">PEA</div>
+          <div class="fiscal-badge">EXONÉRATION 5 ANS</div>
+        </div>
+        <div class="fiscal-desc">Idéal ETF actions européennes · exonération d'impôt sur PV après 5 ans · plafond 150 000€</div>
+        <div class="fiscal-pros">
+          <span class="fiscal-pro-tag">0% IR après 5 ans</span>
+          <span class="fiscal-pro-tag">ETF Europe</span>
+          <span class="fiscal-pro-tag">⚠ Univers limité</span>
+        </div>
+      </div>
+      <div class="fiscal-tab fiscal-per">
+        <div class="fiscal-head">
+          <div class="fiscal-name">PER</div>
+          <div class="fiscal-badge">DÉDUCTION IMMÉDIATE</div>
+        </div>
+        <div class="fiscal-desc">Déduction fiscale à l'entrée (TMI) · pertinent si tranche élevée · capital bloqué jusqu'à retraite</div>
+        <div class="fiscal-pros">
+          <span class="fiscal-pro-tag">Gain fiscal immédiat</span>
+          <span class="fiscal-pro-tag">⚠ Illiquidité</span>
+          <span class="fiscal-pro-tag">Arbitrage TMI</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ERREURS -->
+  <div class="card errors-card">
+    <div class="card-title">⚠️ Erreurs avancées à éviter</div>
+    <div class="errors-grid">
+      <div class="error-item"><div class="error-icon">📋</div><div class="error-text">Sur-optimisation fiscale au détriment du rendement réel</div></div>
+      <div class="error-item"><div class="error-icon">🏠</div><div class="error-text">Trop d'immobilier → manque de liquidité, portefeuille concentré</div></div>
+      <div class="error-item"><div class="error-icon">📉</div><div class="error-text">Sous-exposition actions long terme = manque à gagner majeur</div></div>
+      <div class="error-item"><div class="error-icon">₿</div><div class="error-text">Surexposition crypto → risque asymétrique non maîtrisé</div></div>
+      <div class="error-item"><div class="error-icon">📊</div><div class="error-text">Ignorer l'inflation réelle → rendement nominal ≠ rendement réel</div></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ROADMAP -->
+<div class="card roadmap-card" style="margin-top:12px">
+  <div class="card-title">🚀 Roadmap 25 → 35 ans</div>
+  <div class="roadmap-track">
+    <div class="roadmap-step step-1">
+      <div class="roadmap-dot">25</div>
+      <div class="roadmap-period">25 – 28 ans</div>
+      <div class="roadmap-phase">Accumulation · Risque élevé</div>
+      <ul class="roadmap-items">
+        <li>Fonds d'urgence constitué</li>
+        <li>Ouvrir PEA + AV dès maintenant</li>
+        <li>DCA mensuel ETF monde</li>
+        <li>Tolérance risque maximale</li>
+        <li>Éviter l'immobilier trop tôt</li>
+      </ul>
+    </div>
+    <div class="roadmap-step step-2">
+      <div class="roadmap-dot">28</div>
+      <div class="roadmap-period">28 – 32 ans</div>
+      <div class="roadmap-phase">Structuration · Immobilier</div>
+      <ul class="roadmap-items">
+        <li>Première acquisition possible</li>
+        <li>Diversification obligataire</li>
+        <li>Enveloppes fiscales optimisées</li>
+        <li>Projet professionnel structuré</li>
+        <li>Révision allocation annuelle</li>
+      </ul>
+    </div>
+    <div class="roadmap-step step-3">
+      <div class="roadmap-dot">35</div>
+      <div class="roadmap-period">32 – 35 ans</div>
+      <div class="roadmap-phase">Optimisation · Consolidation</div>
+      <ul class="roadmap-items">
+        <li>Fiscalité optimisée (PEA 5 ans+, AV 8 ans+)</li>
+        <li>Patrimoine diversifié équilibré</li>
+        <li>Réduction progressive du risque</li>
+        <li>Transmission et protection</li>
+        <li>Révision stratégie retraite (PER)</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  <div class="footer-note">📌 Cheatsheet à titre pédagogique · Les performances passées ne préjugent pas des performances futures · Les chiffres de rendement/allocation sont des ordres de grandeur indicatifs</div>
+  <div class="footer-date">Mars 2026</div>
+</div>
+
+</body>
+</html>
