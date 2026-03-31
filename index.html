@@ -1,0 +1,1242 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap');
+
+/* ============================================================
+   VARIABLES & RESET
+============================================================ */
+:root {
+  --bg: #0d0f14;
+  --surface: #13161e;
+  --surface2: #1a1e28;
+  --surface3: #1f2433;
+  --border: rgba(255,255,255,0.07);
+  --border2: rgba(255,255,255,0.12);
+  --green: #22c55e;
+  --blue: #3b82f6;
+  --yellow: #f59e0b;
+  --red: #ef4444;
+  --accent: #818cf8;
+  --text: #f1f5f9;
+  --text-muted: #94a3b8;
+  --text-dim: #64748b;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  line-height: 1.5;
+  min-width: 1100px;
+}
+
+/* ============================================================
+   PAGES
+============================================================ */
+.page { display:none; }
+.page.active { display:block; }
+
+/* ============================================================
+   CHEATSHEET PAGE (page-home) — exact copy
+============================================================ */
+#page-home {
+  padding: 20px;
+}
+
+/* Header */
+.header {
+  display:flex; align-items:flex-start; justify-content:space-between;
+  margin-bottom:24px; padding-bottom:20px; border-bottom:1px solid var(--border);
+}
+.tag {
+  display:inline-flex; align-items:center; gap:6px;
+  background:rgba(99,102,241,0.15); border:1px solid rgba(99,102,241,0.3);
+  color:var(--accent); font-size:10px; font-weight:600; letter-spacing:1.5px;
+  text-transform:uppercase; padding:4px 10px; border-radius:4px; margin-bottom:10px;
+}
+h1 { font-family:'Syne',sans-serif; font-size:26px; font-weight:800; color:var(--text); letter-spacing:-0.5px; line-height:1.2; }
+h1 span { color:var(--accent); }
+.subtitle { color:var(--text-muted); font-size:13px; margin-top:4px; }
+.header-right { display:flex; flex-direction:column; align-items:flex-end; gap:8px; }
+.motto { background:linear-gradient(135deg,rgba(99,102,241,0.15),rgba(59,130,246,0.1)); border:1px solid rgba(99,102,241,0.25); border-radius:8px; padding:10px 16px; text-align:right; max-width:300px; }
+.motto p { font-size:12px; color:var(--text-muted); font-style:italic; }
+.motto strong { font-size:13px; color:var(--accent); font-family:'Syne',sans-serif; }
+.disclaimer { background:rgba(245,158,11,0.07); border:1px solid rgba(245,158,11,0.15); border-radius:6px; padding:6px 12px; font-size:10px; color:rgba(245,158,11,0.7); font-style:italic; max-width:320px; text-align:right; }
+
+/* Grid */
+.grid { display:grid; grid-template-columns:300px 1fr 1fr; gap:12px; }
+.card { background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:14px 16px; }
+.card-title {
+  font-family:'Syne',sans-serif; font-size:11px; font-weight:700;
+  letter-spacing:1.2px; text-transform:uppercase; color:var(--text-muted);
+  margin-bottom:12px; display:flex; align-items:center; gap:8px;
+}
+.card-title::after { content:''; flex:1; height:1px; background:var(--border); }
+
+/* Pyramid */
+.pyramid-card { grid-row:1/4; display:flex; flex-direction:column; }
+.pyramid-container { display:flex; flex-direction:column; align-items:center; gap:3px; margin-bottom:14px; }
+.pyr-level { position:relative; display:flex; align-items:center; justify-content:space-between; border-radius:4px; transition:filter 0.2s,transform 0.2s; cursor:default; padding:0 14px; }
+.pyr-level:hover { filter:brightness(1.15); transform:scaleX(1.01); }
+.pyr-top    { width:42%;  min-height:52px; background:linear-gradient(135deg,rgba(239,68,68,0.25),rgba(239,68,68,0.12)); border:1px solid rgba(239,68,68,0.4); }
+.pyr-upper  { width:62%;  min-height:68px; background:linear-gradient(135deg,rgba(245,158,11,0.25),rgba(245,158,11,0.12)); border:1px solid rgba(245,158,11,0.4); }
+.pyr-mid    { width:80%;  min-height:80px; background:linear-gradient(135deg,rgba(59,130,246,0.25),rgba(59,130,246,0.12)); border:1px solid rgba(59,130,246,0.4); }
+.pyr-base   { width:100%; min-height:90px; background:linear-gradient(135deg,rgba(34,197,94,0.25),rgba(34,197,94,0.12)); border:1px solid rgba(34,197,94,0.4); }
+.pyr-connector { width:0; height:0; border-left:solid transparent; border-right:solid transparent; border-top:6px solid; opacity:0.3; }
+.pyr-connector.red    { border-left-width:53px; border-right-width:53px; border-top-color:var(--red); }
+.pyr-connector.yellow { border-left-width:78px; border-right-width:78px; border-top-color:var(--yellow); }
+.pyr-connector.blue   { border-left-width:100px; border-right-width:100px; border-top-color:var(--blue); }
+.pyr-left { flex:1; }
+.pyr-label { font-family:'Syne',sans-serif; font-size:11.5px; font-weight:700; margin-bottom:3px; }
+.pyr-top .pyr-label    { color:var(--red); }
+.pyr-upper .pyr-label  { color:var(--yellow); }
+.pyr-mid .pyr-label    { color:var(--blue); }
+.pyr-base .pyr-label   { color:var(--green); }
+.pyr-items { display:flex; flex-wrap:wrap; gap:3px; margin-top:3px; }
+.pyr-tag { font-size:9.5px; padding:2px 6px; border-radius:3px; color:var(--text-muted); background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.08); }
+.pyr-insight { font-size:9.5px; color:var(--text-dim); font-style:italic; margin-top:3px; line-height:1.3; }
+.pyr-pct { font-size:20px; font-family:'Syne',sans-serif; font-weight:800; flex-shrink:0; margin-left:8px; }
+
+/* Einstein */
+.einstein-quote { background:linear-gradient(135deg,rgba(245,158,11,0.1),rgba(251,191,36,0.05)); border:1px solid rgba(245,158,11,0.3); border-left:3px solid var(--yellow); border-radius:6px; padding:10px 13px; margin-bottom:12px; }
+.einstein-quote .quote-text { font-size:11.5px; color:var(--text-muted); font-style:italic; line-height:1.5; margin-bottom:4px; }
+.einstein-quote .quote-text em { color:var(--yellow); font-style:normal; font-weight:600; }
+.einstein-quote .quote-author { font-size:10px; color:var(--text-dim); text-align:right; }
+
+/* Examples */
+.examples-block { background:var(--surface2); border:1px solid var(--border); border-radius:7px; padding:10px 12px; }
+.examples-title { font-family:'Syne',sans-serif; font-size:10px; font-weight:700; letter-spacing:1px; text-transform:uppercase; color:var(--text-dim); margin-bottom:8px; }
+.example-row { display:flex; align-items:flex-start; gap:8px; padding:5px 0; border-bottom:1px solid rgba(255,255,255,0.04); }
+.example-row:last-child { border-bottom:none; }
+.example-dot { width:8px; height:8px; border-radius:2px; flex-shrink:0; margin-top:3px; }
+.example-body { flex:1; }
+.example-label { font-size:10.5px; font-weight:600; color:var(--text); margin-bottom:1px; }
+.example-detail { font-size:10px; color:var(--text-dim); line-height:1.3; }
+
+/* Alloc */
+.alloc-card { grid-column:2; grid-row:1; }
+.alloc-inner { display:flex; align-items:center; gap:20px; }
+.donut-wrap { position:relative; width:120px; height:120px; flex-shrink:0; }
+.donut-wrap svg { width:120px; height:120px; transform:rotate(-90deg); }
+.donut-center { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; font-family:'Syne',sans-serif; text-align:center; }
+.donut-center span { font-size:10px; color:var(--text-dim); }
+.donut-center strong { font-size:16px; color:var(--text); font-weight:800; }
+.alloc-legend { flex:1; display:flex; flex-direction:column; gap:6px; }
+.legend-row { display:flex; align-items:center; gap:8px; font-size:11.5px; }
+.legend-dot { width:8px; height:8px; border-radius:2px; flex-shrink:0; }
+.legend-label { color:var(--text-muted); flex:1; }
+.legend-pct { font-weight:700; font-family:'Syne',sans-serif; color:var(--text); }
+.profiles { display:flex; gap:8px; margin-top:10px; }
+.profile-pill { flex:1; padding:6px 10px; border-radius:6px; font-size:10px; line-height:1.4; }
+.profile-pill.agg { background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.2); }
+.profile-pill.cons { background:rgba(34,197,94,0.1); border:1px solid rgba(34,197,94,0.2); }
+.profile-pill strong { display:block; font-family:'Syne',sans-serif; font-size:10px; margin-bottom:2px; }
+.profile-pill.agg strong { color:var(--red); }
+.profile-pill.cons strong { color:var(--green); }
+.profile-pill span { color:var(--text-dim); }
+
+/* Exec */
+.exec-card { grid-column:3; grid-row:1; }
+.exec-items { display:flex; flex-direction:column; gap:8px; }
+.exec-item { background:var(--surface2); border:1px solid var(--border); border-radius:6px; padding:8px 10px; display:flex; align-items:flex-start; gap:10px; }
+.exec-icon { width:28px; height:28px; border-radius:6px; display:flex; align-items:center; justify-content:center; font-size:14px; flex-shrink:0; }
+.exec-body strong { font-family:'Syne',sans-serif; font-size:12px; color:var(--text); display:block; }
+.exec-body span { font-size:10.5px; color:var(--text-dim); }
+.golden-rule { margin-top:8px; background:linear-gradient(135deg,rgba(245,158,11,0.12),rgba(251,191,36,0.06)); border:1px solid rgba(245,158,11,0.25); border-radius:6px; padding:8px 12px; font-size:11.5px; color:var(--yellow); font-family:'Syne',sans-serif; font-weight:600; text-align:center; }
+
+/* Immo card — CLICKABLE */
+.immo-card { grid-column:2; grid-row:2; }
+.immo-card-clickable {
+  cursor:pointer;
+  transition:border-color 0.2s, transform 0.15s, box-shadow 0.2s;
+  position:relative;
+}
+.immo-card-clickable:hover {
+  border-color:var(--accent);
+  transform:translateY(-2px);
+  box-shadow:0 8px 28px rgba(0,0,0,0.35);
+}
+.immo-card-clickable .click-hint {
+  position:absolute; top:10px; right:10px;
+  background:rgba(129,140,248,0.15); border:1px solid rgba(129,140,248,0.3);
+  color:var(--accent); font-size:9px; font-weight:700; letter-spacing:0.5px;
+  padding:2px 8px; border-radius:10px; text-transform:uppercase;
+}
+.immo-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+.immo-col { border-radius:7px; padding:10px 12px; }
+.immo-rp { background:rgba(34,197,94,0.07); border:1px solid rgba(34,197,94,0.15); }
+.immo-loc { background:rgba(59,130,246,0.07); border:1px solid rgba(59,130,246,0.15); }
+.immo-col-title { font-family:'Syne',sans-serif; font-size:12px; font-weight:700; margin-bottom:8px; display:flex; align-items:center; gap:6px; }
+.immo-rp .immo-col-title { color:var(--green); }
+.immo-loc .immo-col-title { color:var(--blue); }
+.immo-list { list-style:none; display:flex; flex-direction:column; gap:3px; }
+.immo-list li { font-size:10.5px; color:var(--text-muted); display:flex; align-items:flex-start; gap:5px; line-height:1.4; }
+.immo-list li.pro::before { content:'✓'; color:var(--green); flex-shrink:0; margin-top:1px; }
+.immo-list li.con::before { content:'✗'; color:var(--red); flex-shrink:0; margin-top:1px; }
+.immo-verdict { grid-column:1/3; background:var(--surface2); border:1px solid var(--border); border-radius:6px; padding:8px 12px; font-size:11px; color:var(--text-muted); text-align:center; font-style:italic; }
+.immo-verdict strong { color:var(--accent); }
+
+/* Fiscal */
+.fiscal-card { grid-column:3; grid-row:2; }
+.fiscal-tabs { display:flex; flex-direction:column; gap:6px; }
+.fiscal-tab { border-radius:6px; padding:8px 10px; }
+.fiscal-av { background:rgba(129,140,248,0.08); border:1px solid rgba(129,140,248,0.2); }
+.fiscal-pea { background:rgba(59,130,246,0.08); border:1px solid rgba(59,130,246,0.2); }
+.fiscal-per { background:rgba(245,158,11,0.08); border:1px solid rgba(245,158,11,0.2); }
+.fiscal-head { display:flex; align-items:center; justify-content:space-between; margin-bottom:4px; }
+.fiscal-name { font-family:'Syne',sans-serif; font-size:12px; font-weight:700; }
+.fiscal-av .fiscal-name { color:var(--accent); }
+.fiscal-pea .fiscal-name { color:var(--blue); }
+.fiscal-per .fiscal-name { color:var(--yellow); }
+.fiscal-badge { font-size:9px; padding:2px 7px; border-radius:10px; font-weight:600; letter-spacing:0.5px; }
+.fiscal-av .fiscal-badge { background:rgba(129,140,248,0.2); color:var(--accent); }
+.fiscal-pea .fiscal-badge { background:rgba(59,130,246,0.2); color:var(--blue); }
+.fiscal-per .fiscal-badge { background:rgba(245,158,11,0.2); color:var(--yellow); }
+.fiscal-desc { font-size:10.5px; color:var(--text-dim); line-height:1.4; }
+.fiscal-pros { display:flex; gap:4px; flex-wrap:wrap; margin-top:4px; }
+.fiscal-pro-tag { font-size:9.5px; padding:2px 6px; border-radius:3px; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.07); color:var(--text-muted); }
+
+/* Errors */
+.errors-card { grid-column:2/4; grid-row:3; }
+.errors-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:6px; }
+.error-item { background:rgba(239,68,68,0.07); border:1px solid rgba(239,68,68,0.15); border-radius:6px; padding:8px 10px; display:flex; flex-direction:column; gap:4px; }
+.error-icon { font-size:16px; }
+.error-text { font-size:10.5px; color:var(--text-muted); line-height:1.35; }
+
+/* Roadmap */
+.roadmap-card { grid-column:1/4; }
+.roadmap-track { position:relative; display:grid; grid-template-columns:repeat(3,1fr); gap:0; }
+.roadmap-track::before { content:''; position:absolute; top:16px; left:5%; right:5%; height:2px; background:linear-gradient(90deg,var(--green),var(--blue),var(--accent)); z-index:0; }
+.roadmap-step { position:relative; z-index:1; text-align:center; padding:0 10px; }
+.roadmap-dot { width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:'Syne',sans-serif; font-size:11px; font-weight:800; margin:0 auto 8px; }
+.step-1 .roadmap-dot { background:rgba(34,197,94,0.2); border:2px solid var(--green); color:var(--green); }
+.step-2 .roadmap-dot { background:rgba(59,130,246,0.2); border:2px solid var(--blue); color:var(--blue); }
+.step-3 .roadmap-dot { background:rgba(129,140,248,0.2); border:2px solid var(--accent); color:var(--accent); }
+.roadmap-period { font-family:'Syne',sans-serif; font-size:13px; font-weight:700; margin-bottom:6px; }
+.step-1 .roadmap-period { color:var(--green); }
+.step-2 .roadmap-period { color:var(--blue); }
+.step-3 .roadmap-period { color:var(--accent); }
+.roadmap-phase { font-size:11px; font-weight:600; color:var(--text); margin-bottom:4px; }
+.roadmap-items { list-style:none; display:flex; flex-direction:column; gap:3px; }
+.roadmap-items li { font-size:10.5px; color:var(--text-dim); display:flex; align-items:flex-start; gap:4px; text-align:left; justify-content:center; }
+.roadmap-items li::before { content:'→'; flex-shrink:0; opacity:0.5; }
+
+/* Footer */
+.footer { margin-top:14px; display:flex; align-items:center; justify-content:space-between; padding-top:12px; border-top:1px solid var(--border); }
+.footer-note { font-size:9.5px; color:var(--text-dim); font-style:italic; }
+.footer-date { font-size:9.5px; color:var(--text-dim); }
+
+/* ============================================================
+   MODAL CHOICE
+============================================================ */
+.modal-overlay {
+  display:none;
+  position:fixed; inset:0; z-index:1000;
+  background:rgba(0,0,0,0.65);
+  backdrop-filter:blur(6px);
+  align-items:center; justify-content:center;
+}
+.modal-overlay.open { display:flex; }
+
+.modal-box {
+  background:var(--surface);
+  border:1px solid var(--border2);
+  border-radius:16px;
+  padding:28px 32px;
+  width:520px;
+  max-width:94vw;
+  box-shadow:0 24px 60px rgba(0,0,0,0.5);
+  animation:modalIn 0.2s ease;
+}
+
+@keyframes modalIn {
+  from { opacity:0; transform:scale(0.95) translateY(10px); }
+  to   { opacity:1; transform:scale(1) translateY(0); }
+}
+
+.modal-close {
+  float:right; cursor:pointer; color:var(--text-dim); font-size:18px; line-height:1;
+  transition:color 0.2s;
+}
+.modal-close:hover { color:var(--text); }
+
+.modal-title {
+  font-family:'Syne',sans-serif; font-size:16px; font-weight:800;
+  margin-bottom:6px; padding-right:24px;
+}
+.modal-sub { font-size:12px; color:var(--text-dim); margin-bottom:22px; }
+
+.modal-choices { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+
+.choice-card {
+  border-radius:12px; padding:20px 18px; cursor:pointer;
+  transition:transform 0.15s, box-shadow 0.15s, border-color 0.15s;
+  border:1px solid var(--border2);
+  background:var(--surface2);
+  display:flex; flex-direction:column; gap:10px;
+}
+.choice-card:hover {
+  transform:translateY(-3px);
+  box-shadow:0 10px 30px rgba(0,0,0,0.4);
+}
+.choice-card.deep:hover { border-color:rgba(129,140,248,0.5); }
+.choice-card.sim:hover  { border-color:rgba(34,197,94,0.5); }
+
+.choice-icon { font-size:26px; }
+.choice-label {
+  font-family:'Syne',sans-serif; font-size:14px; font-weight:800;
+}
+.choice-card.deep .choice-label { color:var(--accent); }
+.choice-card.sim  .choice-label { color:var(--green); }
+.choice-desc { font-size:11.5px; color:var(--text-dim); line-height:1.4; }
+
+.choice-badge {
+  display:inline-flex; padding:3px 9px; border-radius:10px;
+  font-size:10px; font-weight:700; letter-spacing:0.5px; align-self:flex-start;
+}
+.choice-card.deep .choice-badge { background:rgba(129,140,248,0.15); color:var(--accent); }
+.choice-card.sim  .choice-badge { background:rgba(34,197,94,0.15); color:var(--green); }
+
+/* ============================================================
+   INNER NAV (deep / sim pages)
+============================================================ */
+.inner-nav {
+  display:flex; align-items:center; gap:12px;
+  padding:12px 28px;
+  background:rgba(13,15,20,0.96);
+  border-bottom:1px solid var(--border);
+  position:sticky; top:0; z-index:100;
+  backdrop-filter:blur(12px);
+}
+.inner-nav-back {
+  display:flex; align-items:center; gap:6px;
+  font-size:12px; font-weight:600; color:var(--text-muted);
+  cursor:pointer; padding:6px 10px; border-radius:6px;
+  border:1px solid var(--border2); transition:all 0.2s;
+}
+.inner-nav-back:hover { color:var(--text); border-color:var(--accent); }
+.inner-nav-sep { color:var(--text-dim); font-size:14px; }
+.inner-nav-title { font-family:'Syne',sans-serif; font-size:13px; font-weight:700; color:var(--text); }
+.inner-nav-switch {
+  margin-left:auto;
+  display:flex; align-items:center; gap:8px;
+  font-size:11px; color:var(--text-dim); cursor:pointer;
+  padding:6px 12px; border-radius:6px; border:1px solid var(--border);
+  transition:all 0.2s;
+}
+.inner-nav-switch:hover { border-color:var(--accent); color:var(--accent); }
+
+/* ============================================================
+   DEEP PAGE
+============================================================ */
+#page-deep { background:var(--bg); }
+
+.dp-container { max-width:1060px; margin:0 auto; padding:36px 28px 60px; }
+
+.dp-header { margin-bottom:32px; }
+.dp-tag { display:inline-flex; align-items:center; gap:6px; background:rgba(129,140,248,0.12); border:1px solid rgba(129,140,248,0.3); color:var(--accent); font-size:10px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; padding:4px 12px; border-radius:4px; margin-bottom:10px; }
+.dp-title { font-family:'Syne',sans-serif; font-size:28px; font-weight:800; letter-spacing:-0.5px; line-height:1.15; margin-bottom:6px; }
+.dp-title span { color:var(--accent); }
+.dp-sub { font-size:14px; color:var(--text-muted); max-width:580px; }
+
+.dp-section { margin-bottom:36px; }
+.dp-section-head { display:flex; align-items:flex-start; gap:14px; margin-bottom:18px; }
+.dp-section-icon { width:42px; height:42px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:19px; flex-shrink:0; }
+.dp-section-title { font-family:'Syne',sans-serif; font-size:18px; font-weight:700; margin-bottom:3px; }
+.dp-section-desc { font-size:12.5px; color:var(--text-muted); }
+
+/* Lever */
+.lever { background:var(--surface); border:1px solid var(--border); border-radius:9px; padding:14px 16px; }
+.lever-head { display:flex; align-items:center; justify-content:space-between; margin-bottom:7px; }
+.lever-title { font-family:'Syne',sans-serif; font-size:13px; font-weight:700; }
+.lever-impact { font-size:9px; font-weight:700; padding:2px 8px; border-radius:10px; letter-spacing:0.5px; }
+.lever-impact.high { background:rgba(34,197,94,0.2); color:var(--green); }
+.lever-impact.med  { background:rgba(245,158,11,0.2); color:var(--yellow); }
+.lever-body { font-size:12px; color:var(--text-muted); line-height:1.5; }
+.lever-example { margin-top:7px; padding:7px 11px; background:var(--surface2); border-radius:5px; font-size:11.5px; color:var(--text-dim); border-left:2px solid var(--accent); }
+
+/* Before/After */
+.ba-wrap { display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:10px; }
+.ba-box { border-radius:8px; padding:11px 14px; }
+.ba-box.before { background:rgba(239,68,68,0.08); border:1px solid rgba(239,68,68,0.2); }
+.ba-box.after  { background:rgba(34,197,94,0.08); border:1px solid rgba(34,197,94,0.2); }
+.ba-lbl { font-size:9px; font-weight:700; letter-spacing:1px; text-transform:uppercase; margin-bottom:3px; }
+.ba-box.before .ba-lbl { color:var(--red); }
+.ba-box.after  .ba-lbl { color:var(--green); }
+.ba-val { font-family:'Syne',sans-serif; font-size:17px; font-weight:800; }
+.ba-hint { font-size:10.5px; color:var(--text-dim); margin-top:2px; }
+.ba-arrow { color:var(--text-dim); font-size:18px; }
+
+/* Statut cards */
+.statut-card { border-radius:10px; padding:15px 17px; height:100%; }
+.statut-lmnp { background:rgba(129,140,248,0.08); border:1px solid rgba(129,140,248,0.2); }
+.statut-nue  { background:rgba(245,158,11,0.08); border:1px solid rgba(245,158,11,0.2); }
+.statut-sci  { background:rgba(59,130,246,0.08); border:1px solid rgba(59,130,246,0.2); }
+.statut-name { font-family:'Syne',sans-serif; font-size:14px; font-weight:800; margin-bottom:3px; }
+.statut-lmnp .statut-name { color:var(--accent); }
+.statut-nue  .statut-name { color:var(--yellow); }
+.statut-sci  .statut-name { color:var(--blue); }
+.statut-sub { font-size:11px; color:var(--text-dim); margin-bottom:10px; }
+.statut-list { list-style:none; display:flex; flex-direction:column; gap:4px; }
+.statut-list li { font-size:11.5px; color:var(--text-muted); display:flex; gap:7px; align-items:flex-start; }
+.statut-list li.pro::before { content:'✓'; color:var(--green); flex-shrink:0; }
+.statut-list li.con::before { content:'✗'; color:var(--red); flex-shrink:0; }
+.statut-badge { margin-top:9px; display:inline-flex; padding:3px 10px; border-radius:20px; font-size:10px; font-weight:700; }
+.statut-lmnp .statut-badge { background:rgba(129,140,248,0.2); color:var(--accent); }
+.statut-nue  .statut-badge { background:rgba(245,158,11,0.2); color:var(--yellow); }
+.statut-sci  .statut-badge { background:rgba(59,130,246,0.2); color:var(--blue); }
+
+/* LMNP example */
+.lmnp-ex { background:var(--surface2); border:1px solid var(--border); border-radius:9px; padding:14px 18px; }
+.lmnp-row { display:flex; justify-content:space-between; padding:5px 0; border-bottom:1px solid rgba(255,255,255,0.04); font-size:12.5px; }
+.lmnp-row:last-child { border-bottom:none; }
+.lmnp-row .lbl { color:var(--text-muted); }
+.lmnp-row .val { font-weight:600; font-family:'Syne',sans-serif; }
+.lmnp-row .val.pos { color:var(--green); }
+.lmnp-row .val.neg { color:var(--red); }
+.lmnp-row .val.acc { color:var(--accent); }
+.lmnp-row.total-row { background:var(--surface3); border-radius:6px; padding:7px 10px; margin-top:4px; font-weight:700; }
+
+/* Criteria */
+.criteria-item { display:flex; gap:11px; padding:11px 13px; background:var(--surface); border:1px solid var(--border); border-radius:8px; align-items:flex-start; }
+.criteria-num { width:24px; height:24px; border-radius:6px; background:rgba(129,140,248,0.15); border:1px solid rgba(129,140,248,0.3); color:var(--accent); font-family:'Syne',sans-serif; font-weight:800; font-size:11px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.criteria-body strong { font-size:12.5px; color:var(--text); font-family:'Syne',sans-serif; display:block; margin-bottom:2px; }
+.criteria-body span { font-size:11.5px; color:var(--text-dim); line-height:1.4; }
+
+/* Error block */
+.err-block { background:rgba(239,68,68,0.07); border:1px solid rgba(239,68,68,0.15); border-radius:8px; padding:11px 13px; display:flex; gap:10px; align-items:flex-start; }
+.err-ico { font-size:17px; flex-shrink:0; }
+.err-body strong { font-size:12px; color:var(--text); font-family:'Syne',sans-serif; display:block; margin-bottom:1px; }
+.err-body span { font-size:11px; color:var(--text-dim); }
+
+/* CTA */
+.dp-cta { background:linear-gradient(135deg,rgba(129,140,248,0.12),rgba(59,130,246,0.08)); border:1px solid rgba(129,140,248,0.3); border-radius:14px; padding:30px 36px; display:flex; align-items:center; justify-content:space-between; gap:20px; margin-top:36px; }
+.dp-cta-title { font-family:'Syne',sans-serif; font-size:20px; font-weight:800; margin-bottom:5px; }
+.dp-cta-desc { font-size:13px; color:var(--text-muted); }
+.btn-cta { display:inline-flex; align-items:center; gap:8px; padding:13px 26px; background:var(--accent); color:#fff; border:none; border-radius:8px; font-family:'Syne',sans-serif; font-size:13px; font-weight:700; cursor:pointer; transition:all 0.2s; flex-shrink:0; }
+.btn-cta:hover { background:#6366f1; transform:translateY(-1px); }
+
+/* Grid helpers */
+.g2 { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.g3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; }
+.dp-hr { border:none; border-top:1px solid var(--border); margin:28px 0; }
+
+/* ============================================================
+   SIMULATOR PAGE
+============================================================ */
+#page-sim { background:var(--bg); }
+
+.sim-container { max-width:1060px; margin:0 auto; padding:36px 28px 60px; }
+.sim-header { margin-bottom:28px; }
+
+.sim-layout { display:grid; grid-template-columns:360px 1fr; gap:20px; align-items:start; }
+
+/* Inputs */
+.input-group { display:flex; flex-direction:column; gap:5px; margin-bottom:12px; }
+.input-label { font-size:11.5px; font-weight:600; color:var(--text-muted); }
+.input-suffix { display:flex; align-items:center; background:var(--surface2); border:1px solid var(--border2); border-radius:7px; overflow:hidden; }
+.input-suffix input { background:transparent; border:none; padding:9px 13px; color:var(--text); font-size:13.5px; font-family:'DM Sans',sans-serif; flex:1; outline:none; width:100%; }
+.input-suffix:focus-within { border-color:var(--accent); }
+.input-suffix .suf { padding:9px 13px; color:var(--text-dim); font-size:12px; border-left:1px solid var(--border); background:var(--surface3); white-space:nowrap; }
+
+.mode-sel { display:flex; gap:6px; margin-bottom:16px; }
+.mode-btn { flex:1; padding:9px 6px; border-radius:7px; border:1px solid var(--border2); background:transparent; color:var(--text-muted); font-size:11.5px; font-weight:600; cursor:pointer; transition:all 0.2s; text-align:center; font-family:'DM Sans',sans-serif; }
+.mode-btn.active { background:rgba(129,140,248,0.15); border-color:rgba(129,140,248,0.4); color:var(--accent); }
+
+.sec-div { font-size:10px; font-weight:700; letter-spacing:1px; text-transform:uppercase; color:var(--text-dim); padding:7px 0 5px; border-top:1px solid var(--border); margin:4px 0 8px; }
+
+/* Result */
+.res-card { background:var(--surface); border:1px solid var(--border); border-radius:11px; padding:16px 18px; margin-bottom:12px; }
+.res-label { font-size:10px; font-weight:600; letter-spacing:0.5px; text-transform:uppercase; color:var(--text-dim); margin-bottom:3px; }
+.res-value { font-family:'Syne',sans-serif; font-size:26px; font-weight:800; line-height:1; margin-bottom:3px; }
+.res-value.pos { color:var(--green); }
+.res-value.neg { color:var(--red); }
+.res-value.neu { color:var(--yellow); }
+.res-sub { font-size:11px; color:var(--text-dim); }
+
+.res-grid { display:grid; grid-template-columns:1fr 1fr; gap:9px; margin-bottom:12px; }
+.res-mini { background:var(--surface2); border:1px solid var(--border); border-radius:9px; padding:11px 13px; }
+.res-mini .res-label { font-size:9.5px; margin-bottom:2px; }
+.res-mini .res-value { font-size:19px; }
+
+.bkd { background:var(--surface); border:1px solid var(--border); border-radius:11px; padding:14px 18px; margin-bottom:12px; }
+.bkd-row { display:flex; justify-content:space-between; padding:5px 0; border-bottom:1px solid rgba(255,255,255,0.04); font-size:12.5px; }
+.bkd-row:last-child { border-bottom:none; }
+.bkd-row .bl { color:var(--text-muted); }
+.bkd-row .bv { font-weight:600; }
+.bkd-row .bv.pos { color:var(--green); }
+.bkd-row .bv.neg { color:var(--red); }
+.bkd-row .bv.acc { color:var(--accent); }
+.bkd-row.btot { font-weight:700; background:var(--surface3); border-radius:5px; padding:7px 9px; margin-top:3px; }
+
+.verdict { border-radius:11px; padding:16px 18px; margin-bottom:12px; }
+.verdict.good { background:rgba(34,197,94,0.07); border:1px solid rgba(34,197,94,0.22); }
+.verdict.warn { background:rgba(245,158,11,0.07); border:1px solid rgba(245,158,11,0.22); }
+.verdict.bad  { background:rgba(239,68,68,0.07); border:1px solid rgba(239,68,68,0.22); }
+.vd-head { display:flex; align-items:center; gap:9px; margin-bottom:8px; }
+.vd-emoji { font-size:20px; }
+.vd-title { font-family:'Syne',sans-serif; font-size:14px; font-weight:700; }
+.verdict.good .vd-title { color:var(--green); }
+.verdict.warn .vd-title { color:var(--yellow); }
+.verdict.bad  .vd-title { color:var(--red); }
+.vd-body { font-size:12.5px; color:var(--text-muted); line-height:1.55; }
+.vd-pts { margin-top:8px; display:flex; flex-direction:column; gap:4px; }
+.vd-pt { font-size:11.5px; color:var(--text-dim); display:flex; gap:7px; }
+.vd-pt::before { content:'→'; flex-shrink:0; }
+
+.cmp-bar { background:var(--surface); border:1px solid var(--border); border-radius:11px; padding:14px 18px; margin-bottom:12px; }
+.cmp-title { font-size:10px; font-weight:700; color:var(--text-dim); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:10px; }
+.cmp-row { display:flex; align-items:center; gap:9px; margin-bottom:7px; }
+.cmp-row:last-child { margin-bottom:0; }
+.cmp-lbl { font-size:11.5px; color:var(--text-muted); width:110px; flex-shrink:0; }
+.cmp-track { flex:1; height:7px; background:var(--surface3); border-radius:3px; overflow:hidden; }
+.cmp-fill { height:100%; border-radius:3px; transition:width 0.5s ease; }
+.cmp-val { font-size:11.5px; font-weight:700; font-family:'Syne',sans-serif; width:60px; text-align:right; flex-shrink:0; }
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     MODAL CHOICE
+============================================================ -->
+<div class="modal-overlay" id="modal">
+  <div class="modal-box">
+    <span class="modal-close" onclick="closeModal()">✕</span>
+    <div class="modal-title">🏠 Résidence principale vs Locatif</div>
+    <div class="modal-sub">Choisissez comment approfondir ce bloc :</div>
+    <div class="modal-choices">
+      <div class="choice-card deep" onclick="goTo('deep')">
+        <div class="choice-icon">📖</div>
+        <div class="choice-label">Stratégie immobilière complète</div>
+        <div class="choice-desc">Financement, leviers, LMNP, résidence principale — tout le contenu pédagogique structuré.</div>
+        <div class="choice-badge">Approfondissement</div>
+      </div>
+      <div class="choice-card sim" onclick="goTo('sim')">
+        <div class="choice-icon">🔢</div>
+        <div class="choice-label">Calculez votre projet immobilier</div>
+        <div class="choice-desc">Cash-flow, rendement, fiscalité estimée et verdict intelligent selon vos données.</div>
+        <div class="choice-badge">Simulateur interactif</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     PAGE HOME — CHEATSHEET EXACTE
+============================================================ -->
+<div class="page active" id="page-home">
+<div class="header">
+  <div class="header-left">
+    <div class="tag">📊 Cheatsheet Patrimoine · 25–35 ans · France</div>
+    <h1>Construire un patrimoine <span>intelligent</span></h1>
+    <p class="subtitle">Pyramide d'investissement · Immobilier · Optimisation fiscale</p>
+  </div>
+  <div class="header-right">
+    <div class="motto">
+      <p>Règle fondamentale</p>
+      <strong>"Ton allocation compte plus que tes choix individuels."</strong>
+    </div>
+    <div class="disclaimer">⚠️ À titre informatif uniquement — pas un conseil en investissement. Consultez un CGP pour votre situation.</div>
+  </div>
+</div>
+
+<div class="grid">
+
+  <!-- PYRAMIDE -->
+  <div class="card pyramid-card">
+    <div class="card-title">🔺 Pyramide d'investissement</div>
+    <div class="pyramid-container">
+      <div class="pyr-level pyr-top">
+        <div class="pyr-left">
+          <div class="pyr-label">🟥 Alpha / Asymétrie</div>
+          <div class="pyr-items"><span class="pyr-tag">Crypto</span><span class="pyr-tag">Private Equity</span><span class="pyr-tag">Startups</span></div>
+          <div class="pyr-insight">→ x5/x10 possible · forte probabilité de perte</div>
+        </div>
+        <div class="pyr-pct" style="color:var(--red)">5–15%</div>
+      </div>
+      <div class="pyr-connector red"></div>
+      <div class="pyr-level pyr-upper">
+        <div class="pyr-left">
+          <div class="pyr-label">🟨 Croissance cœur</div>
+          <div class="pyr-items"><span class="pyr-tag">MSCI World ETF</span><span class="pyr-tag">ACWI</span><span class="pyr-tag">ETF US/EU/EM</span></div>
+          <div class="pyr-insight">→ Richesse LT · -30/50% possible en crise</div>
+        </div>
+        <div class="pyr-pct" style="color:var(--yellow)">40–60%</div>
+      </div>
+      <div class="pyr-connector yellow"></div>
+      <div class="pyr-level pyr-mid">
+        <div class="pyr-left">
+          <div class="pyr-label">🟦 Stabilisation</div>
+          <div class="pyr-items"><span class="pyr-tag">ETF Obligations</span><span class="pyr-tag">AV fonds €</span><span class="pyr-tag">Low Volatility</span></div>
+          <div class="pyr-insight">→ Amortisseur de volatilité · faible drawdown</div>
+        </div>
+        <div class="pyr-pct" style="color:var(--blue)">15–30%</div>
+      </div>
+      <div class="pyr-connector blue"></div>
+      <div class="pyr-level pyr-base">
+        <div class="pyr-left">
+          <div class="pyr-label">🟩 Base / Optionalité</div>
+          <div class="pyr-items"><span class="pyr-tag">Livret A / LDDS</span><span class="pyr-tag">Fonds urgence</span><span class="pyr-tag">Monétaire</span></div>
+          <div class="pyr-insight">→ 3–6 mois de dépenses · rend. réel souvent négatif</div>
+        </div>
+        <div class="pyr-pct" style="color:var(--green)">5–15%</div>
+      </div>
+    </div>
+
+    <div class="einstein-quote">
+      <div class="quote-text">"Les intérêts composés sont <em>la huitième merveille du monde</em>. Celui qui les comprend les gagne ; celui qui ne les comprend pas les paie."</div>
+      <div class="quote-author">— Citation attribuée à Albert Einstein ⚠️ paternité non formellement établie</div>
+    </div>
+
+    <div class="examples-block">
+      <div class="examples-title">💡 Exemples concrets d'intérêts composés</div>
+      <div class="example-row">
+        <div class="example-dot" style="background:var(--yellow)"></div>
+        <div class="example-body"><div class="example-label">200€/mois pendant 20 ans à 7%/an</div><div class="example-detail">→ Capital investi : 48 000€ · Valeur finale : ~104 000€ (+116%)</div></div>
+      </div>
+      <div class="example-row">
+        <div class="example-dot" style="background:var(--blue)"></div>
+        <div class="example-body"><div class="example-label">Commencer à 25 ans vs 35 ans</div><div class="example-detail">→ 10 ans de retard = patrimoine final ~2x plus faible à 65 ans</div></div>
+      </div>
+      <div class="example-row">
+        <div class="example-dot" style="background:var(--green)"></div>
+        <div class="example-body"><div class="example-label">Règle des 72</div><div class="example-detail">→ 72 ÷ taux de rendement = années pour doubler le capital. Ex : 72 ÷ 8% = ~9 ans</div></div>
+      </div>
+      <div class="example-row" style="border:none">
+        <div class="example-dot" style="background:var(--red)"></div>
+        <div class="example-body"><div class="example-label">L'ennemi des intérêts composés</div><div class="example-detail">→ Frais de gestion 2%/an sur 30 ans = -40% du capital final</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ALLOCATION -->
+  <div class="card alloc-card">
+    <div class="card-title">🥧 Allocation type 25–35 ans</div>
+    <div class="alloc-inner">
+      <div class="donut-wrap">
+        <svg viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="18" cy="18" r="15.9155" fill="none" stroke="#f59e0b" stroke-width="3.5" stroke-dasharray="50 50" stroke-dashoffset="0"/>
+          <circle cx="18" cy="18" r="15.9155" fill="none" stroke="#3b82f6" stroke-width="3.5" stroke-dasharray="20 80" stroke-dashoffset="-50"/>
+          <circle cx="18" cy="18" r="15.9155" fill="none" stroke="#818cf8" stroke-width="3.5" stroke-dasharray="10 90" stroke-dashoffset="-70"/>
+          <circle cx="18" cy="18" r="15.9155" fill="none" stroke="#ef4444" stroke-width="3.5" stroke-dasharray="10 90" stroke-dashoffset="-80"/>
+          <circle cx="18" cy="18" r="15.9155" fill="none" stroke="#22c55e" stroke-width="3.5" stroke-dasharray="10 90" stroke-dashoffset="-90"/>
+        </svg>
+        <div class="donut-center"><span>Allocation</span><strong>cœur</strong></div>
+      </div>
+      <div>
+        <div class="alloc-legend">
+          <div class="legend-row"><div class="legend-dot" style="background:var(--yellow)"></div><span class="legend-label">Actions (ETF monde)</span><span class="legend-pct" style="color:var(--yellow)">50%</span></div>
+          <div class="legend-row"><div class="legend-dot" style="background:var(--blue)"></div><span class="legend-label">Stabilisation</span><span class="legend-pct" style="color:var(--blue)">20%</span></div>
+          <div class="legend-row"><div class="legend-dot" style="background:var(--accent)"></div><span class="legend-label">Immobilier</span><span class="legend-pct" style="color:var(--accent)">10%</span></div>
+          <div class="legend-row"><div class="legend-dot" style="background:var(--red)"></div><span class="legend-label">Opportunités</span><span class="legend-pct" style="color:var(--red)">10%</span></div>
+          <div class="legend-row"><div class="legend-dot" style="background:var(--green)"></div><span class="legend-label">Sécurité</span><span class="legend-pct" style="color:var(--green)">10%</span></div>
+        </div>
+        <div class="profiles">
+          <div class="profile-pill agg"><strong>🔥 Agressif</strong><span>↑ Actions + Crypto</span></div>
+          <div class="profile-pill cons"><strong>🛡 Prudent</strong><span>↑ Obligations + AV</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EXECUTION -->
+  <div class="card exec-card">
+    <div class="card-title">🔁 Stratégie d'exécution</div>
+    <div class="exec-items">
+      <div class="exec-item">
+        <div class="exec-icon" style="background:rgba(34,197,94,0.12)">📅</div>
+        <div class="exec-body"><strong>DCA — Dollar Cost Averaging</strong><span>Investissement régulier (mensuel) · lisse le risque d'entrée · automatisable</span></div>
+      </div>
+      <div class="exec-item">
+        <div class="exec-icon" style="background:rgba(59,130,246,0.12)">💰</div>
+        <div class="exec-body"><strong>Lump Sum</strong><span>Si capital important disponible · historiquement supérieur au DCA sur marchés haussiers</span></div>
+      </div>
+      <div class="exec-item">
+        <div class="exec-icon" style="background:rgba(245,158,11,0.12)">⚖️</div>
+        <div class="exec-body"><strong>Rééquilibrage annuel</strong><span>Réallouer vers cibles initiales · discipline + réduction du biais émotionnel</span></div>
+      </div>
+    </div>
+    <div class="golden-rule">⏳ "Time in the market > timing the market"</div>
+  </div>
+
+  <!-- IMMOBILIER — CLICKABLE -->
+  <div class="card immo-card immo-card-clickable" onclick="openModal()">
+    <div class="click-hint">→ Approfondir</div>
+    <div class="card-title">🏠 Résidence principale vs Locatif</div>
+    <div class="immo-grid">
+      <div class="immo-col immo-rp">
+        <div class="immo-col-title">🏡 Résidence principale</div>
+        <ul class="immo-list">
+          <li class="pro">Exonération plus-value (France)</li>
+          <li class="pro">Effet de levier bancaire</li>
+          <li class="pro">"Loyer à soi-même" · stabilité</li>
+          <li class="con">Faible rendement réel</li>
+          <li class="con">Capital immobilisé</li>
+          <li class="con">Coûts notaire + entretien</li>
+        </ul>
+        <div style="margin-top:6px;font-size:10px;color:var(--text-dim);font-style:italic">→ Profil : aversion au risque / stabilité</div>
+      </div>
+      <div class="immo-col immo-loc">
+        <div class="immo-col-title">🏢 Locatif</div>
+        <ul class="immo-list">
+          <li class="pro">Revenus passifs + cash-flow</li>
+          <li class="pro">Levier bancaire fort</li>
+          <li class="pro">Optimisation fiscale possible</li>
+          <li class="con">Risque vacance locative</li>
+          <li class="con">Fiscalité lourde sans stratégie</li>
+          <li class="con">Gestion active requise</li>
+        </ul>
+        <div style="margin-top:6px;font-size:10px;color:var(--text-dim);font-style:italic">→ Profil : investisseur actif / discipliné</div>
+      </div>
+      <div class="immo-verdict"><strong>RP = choix de vie</strong> · <strong>Locatif = choix d'investissement</strong> — les deux se complètent selon votre horizon et objectifs.</div>
+    </div>
+  </div>
+
+  <!-- FISCALITE -->
+  <div class="card fiscal-card">
+    <div class="card-title">💰 Enveloppes fiscales prioritaires</div>
+    <div class="fiscal-tabs">
+      <div class="fiscal-tab fiscal-av">
+        <div class="fiscal-head"><div class="fiscal-name">Assurance-Vie</div><div class="fiscal-badge">PILIER LONG TERME</div></div>
+        <div class="fiscal-desc">Fiscalité allégée après 8 ans · large choix (ETF via UC, fonds €) · flexible et transmissible</div>
+        <div class="fiscal-pros"><span class="fiscal-pro-tag">Abattement 4 600€ / 9 200€</span><span class="fiscal-pro-tag">Transmission optimisée</span><span class="fiscal-pro-tag">ETF accessibles</span></div>
+      </div>
+      <div class="fiscal-tab fiscal-pea">
+        <div class="fiscal-head"><div class="fiscal-name">PEA</div><div class="fiscal-badge">EXONÉRATION 5 ANS</div></div>
+        <div class="fiscal-desc">Idéal ETF actions européennes · exonération d'impôt sur PV après 5 ans · plafond 150 000€</div>
+        <div class="fiscal-pros"><span class="fiscal-pro-tag">0% IR après 5 ans</span><span class="fiscal-pro-tag">ETF Europe</span><span class="fiscal-pro-tag">⚠ Univers limité</span></div>
+      </div>
+      <div class="fiscal-tab fiscal-per">
+        <div class="fiscal-head"><div class="fiscal-name">PER</div><div class="fiscal-badge">DÉDUCTION IMMÉDIATE</div></div>
+        <div class="fiscal-desc">Déduction fiscale à l'entrée (TMI) · pertinent si tranche élevée · capital bloqué jusqu'à retraite</div>
+        <div class="fiscal-pros"><span class="fiscal-pro-tag">Gain fiscal immédiat</span><span class="fiscal-pro-tag">⚠ Illiquidité</span><span class="fiscal-pro-tag">Arbitrage TMI</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ERREURS -->
+  <div class="card errors-card">
+    <div class="card-title">⚠️ Erreurs avancées à éviter</div>
+    <div class="errors-grid">
+      <div class="error-item"><div class="error-icon">📋</div><div class="error-text">Sur-optimisation fiscale au détriment du rendement réel</div></div>
+      <div class="error-item"><div class="error-icon">🏠</div><div class="error-text">Trop d'immobilier → manque de liquidité, portefeuille concentré</div></div>
+      <div class="error-item"><div class="error-icon">📉</div><div class="error-text">Sous-exposition actions long terme = manque à gagner majeur</div></div>
+      <div class="error-item"><div class="error-icon">₿</div><div class="error-text">Surexposition crypto → risque asymétrique non maîtrisé</div></div>
+      <div class="error-item"><div class="error-icon">📊</div><div class="error-text">Ignorer l'inflation réelle → rendement nominal ≠ rendement réel</div></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ROADMAP -->
+<div class="card roadmap-card" style="margin-top:12px">
+  <div class="card-title">🚀 Roadmap 25 → 35 ans</div>
+  <div class="roadmap-track">
+    <div class="roadmap-step step-1">
+      <div class="roadmap-dot">25</div>
+      <div class="roadmap-period">25 – 28 ans</div>
+      <div class="roadmap-phase">Accumulation · Risque élevé</div>
+      <ul class="roadmap-items">
+        <li>Fonds d'urgence constitué</li><li>Ouvrir PEA + AV dès maintenant</li><li>DCA mensuel ETF monde</li><li>Tolérance risque maximale</li><li>Éviter l'immobilier trop tôt</li>
+      </ul>
+    </div>
+    <div class="roadmap-step step-2">
+      <div class="roadmap-dot">28</div>
+      <div class="roadmap-period">28 – 32 ans</div>
+      <div class="roadmap-phase">Structuration · Immobilier</div>
+      <ul class="roadmap-items">
+        <li>Première acquisition possible</li><li>Diversification obligataire</li><li>Enveloppes fiscales optimisées</li><li>Projet professionnel structuré</li><li>Révision allocation annuelle</li>
+      </ul>
+    </div>
+    <div class="roadmap-step step-3">
+      <div class="roadmap-dot">35</div>
+      <div class="roadmap-period">32 – 35 ans</div>
+      <div class="roadmap-phase">Optimisation · Consolidation</div>
+      <ul class="roadmap-items">
+        <li>Fiscalité optimisée (PEA 5 ans+, AV 8 ans+)</li><li>Patrimoine diversifié équilibré</li><li>Réduction progressive du risque</li><li>Transmission et protection</li><li>Révision stratégie retraite (PER)</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  <div class="footer-note">📌 Cheatsheet à titre pédagogique · Les performances passées ne préjugent pas des performances futures · Les chiffres de rendement/allocation sont des ordres de grandeur indicatifs</div>
+  <div class="footer-date">Mars 2026</div>
+</div>
+</div><!-- /page-home -->
+
+<!-- ============================================================
+     PAGE DEEP — APPROFONDISSEMENT
+============================================================ -->
+<div class="page" id="page-deep">
+  <nav class="inner-nav">
+    <div class="inner-nav-back" onclick="goTo('home')">← Retour cheatsheet</div>
+    <div class="inner-nav-sep">·</div>
+    <div class="inner-nav-title">📖 Stratégie immobilière complète</div>
+    <div class="inner-nav-switch" onclick="goTo('sim')">🔢 Aller au simulateur →</div>
+  </nav>
+
+  <div class="dp-container">
+    <div class="dp-header">
+      <div class="dp-tag">📖 Approfondissement · Immobilier</div>
+      <div class="dp-title">Stratégie <span>immobilière</span> complète</div>
+      <div class="dp-sub">Financement, résidence principale et mise en location : tout ce qu'il faut comprendre avant de décider.</div>
+    </div>
+
+    <!-- SECTION A : FINANCEMENT -->
+    <div class="dp-section">
+      <div class="dp-section-head">
+        <div class="dp-section-icon" style="background:rgba(34,197,94,0.12);border:1px solid rgba(34,197,94,0.2);">💰</div>
+        <div>
+          <div class="dp-section-title">A. Maximiser son financement</div>
+          <div class="dp-section-desc">Comment augmenter la capacité d'emprunt et négocier intelligemment son crédit immobilier.</div>
+        </div>
+      </div>
+
+      <!-- Point de départ -->
+      <div class="card" style="margin-bottom:14px;background:rgba(239,68,68,0.05);border-color:rgba(239,68,68,0.18);">
+        <div style="font-family:'Syne',sans-serif;font-size:12.5px;font-weight:700;color:var(--red);margin-bottom:10px;">⚠️ Exemple typique : il manque de la capacité d'emprunt</div>
+        <div class="ba-wrap">
+          <div class="ba-box before"><div class="ba-lbl">Situation initiale</div><div class="ba-val" style="color:var(--red);font-size:15px;">160k€ à 3.6%</div><div class="ba-hint">Apport 100k · Prix cible 350k</div><div class="ba-hint" style="color:var(--red);margin-top:3px;">→ Manque 90k d'emprunt</div></div>
+          <div class="ba-arrow">→</div>
+          <div class="ba-box after"><div class="ba-lbl">Après optimisation</div><div class="ba-val" style="color:var(--green);font-size:15px;">250k€ possible</div><div class="ba-hint">Durée 25 ans + optimisation profil</div><div class="ba-hint" style="color:var(--green);margin-top:3px;">→ Projet finançable</div></div>
+        </div>
+        <div style="margin-top:9px;font-size:11.5px;color:var(--text-dim);padding:7px 11px;background:var(--surface2);border-radius:5px;">💡 Le levier principal = augmenter la capacité d'emprunt, pas uniquement le taux.</div>
+      </div>
+
+      <div style="font-size:12px;font-weight:700;color:var(--text-muted);margin-bottom:9px;">🔑 Leviers pour augmenter le montant empruntable</div>
+      <div class="g2" style="margin-bottom:14px;">
+        <div class="lever">
+          <div class="lever-head"><div class="lever-title">1. Allonger la durée du prêt</div><div class="lever-impact high">IMPACT FORT</div></div>
+          <div class="lever-body">Passer de 20 à 25 ans augmente significativement le capital empruntable. La mensualité monte moins vite que le capital accordé.</div>
+          <div class="lever-example">160k sur 20 ans ≈ <strong>940€/mois</strong><br>250k sur 25 ans ≈ <strong>1 350€/mois</strong> (+44% mensualité pour +56% de capital)</div>
+        </div>
+        <div class="lever">
+          <div class="lever-head"><div class="lever-title">2. Intégrer les revenus variables</div><div class="lever-impact med">IMPACT MOYEN</div></div>
+          <div class="lever-body">Bonus, primes et revenus locatifs futurs peuvent être intégrés. Les banques retiennent généralement 70% des loyers estimés.</div>
+          <div class="lever-example">Chambre louée 600€/mois → banque retient <strong>420€</strong> → augmente la capacité d'emprunt</div>
+        </div>
+        <div class="lever">
+          <div class="lever-head"><div class="lever-title">3. Supprimer les crédits existants</div><div class="lever-impact high">IMPACT FORT</div></div>
+          <div class="lever-body">Chaque crédit en cours réduit mécaniquement le taux d'endettement disponible. Rembourser avant d'emprunter peut débloquer le projet.</div>
+          <div class="lever-example">300€/mois de crédit conso = <strong>~60k€ de capacité en moins</strong></div>
+        </div>
+        <div class="lever">
+          <div class="lever-head"><div class="lever-title">4. Optimiser son profil bancaire</div><div class="lever-impact med">IMPACT MOYEN</div></div>
+          <div class="lever-body">Les banques valorisent : CDI confirmé, épargne restante après achat, 0 découvert. Ne pas mettre tout son apport est une stratégie.</div>
+          <div class="lever-example">💡 Garder 10–20k€ après achat rassure la banque et préserve votre optionalité</div>
+        </div>
+      </div>
+
+      <div style="font-size:12px;font-weight:700;color:var(--text-muted);margin-bottom:9px;">🧠 Ce qu'il faut négocier</div>
+      <div class="lever" style="margin-bottom:10px;">
+        <div class="lever-head"><div class="lever-title">Assurance emprunteur (Loi Lemoine)</div><div class="lever-impact high">LEVIER MAJEUR</div></div>
+        <div class="lever-body">Résiliation à tout moment depuis la Loi Lemoine. Stratégie : accepter l'assurance banque à l'origine, changer après signature.</div>
+        <div class="lever-example">Banque : 80€/mois → Délégation : 35€/mois → <strong>Économie ~17 000€ sur 25 ans</strong></div>
+      </div>
+      <div class="g3" style="margin-bottom:14px;">
+        <div class="lever"><div class="lever-title" style="margin-bottom:5px;">Taux d'intérêt</div><div class="lever-body">Mettez en concurrence 3–5 banques + courtier.</div><div class="lever-example">0.2% sur 200k = <strong>~5 000€ d'écart</strong></div></div>
+        <div class="lever"><div class="lever-title" style="margin-bottom:5px;">Frais de dossier</div><div class="lever-body">Souvent 500 à 1500€. Négociez réduction ou suppression.</div><div class="lever-example">Demander systématiquement la suppression</div></div>
+        <div class="lever"><div class="lever-title" style="margin-bottom:5px;">Pénalités IRA</div><div class="lever-body">Cruciales si vous souhaitez revendre ou refinancer.</div><div class="lever-example">Objectif : suppression totale ou plafonnement</div></div>
+      </div>
+
+      <div style="font-size:12px;font-weight:700;color:var(--text-muted);margin-bottom:9px;">❌ Erreurs classiques à éviter</div>
+      <div class="g2" style="gap:8px;">
+        <div class="err-block"><div class="err-ico">💸</div><div class="err-body"><strong>Mettre tout son apport</strong><span>Conservez 10–20k€ pour l'épargne de sécurité et rassurer la banque.</span></div></div>
+        <div class="err-block"><div class="err-ico">🏦</div><div class="err-body"><strong>Ne pas comparer les banques</strong><span>Consulter 1 seule banque = manque à gagner systématique.</span></div></div>
+        <div class="err-block"><div class="err-ico">📋</div><div class="err-body"><strong>Négliger l'assurance</strong><span>Son coût peut dépasser les intérêts sur 20 ans. C'est le levier le plus sous-estimé.</span></div></div>
+        <div class="err-block"><div class="err-ico">🔧</div><div class="err-body"><strong>Ignorer les frais annexes</strong><span>Notaire (~8%), travaux, charges copro : intégrez tout dans le budget réel.</span></div></div>
+      </div>
+    </div>
+
+    <hr class="dp-hr">
+
+    <!-- SECTION B : RÉSIDENCE PRINCIPALE -->
+    <div class="dp-section">
+      <div class="dp-section-head">
+        <div class="dp-section-icon" style="background:rgba(34,197,94,0.12);border:1px solid rgba(34,197,94,0.2);">🏡</div>
+        <div>
+          <div class="dp-section-title">B. Résidence principale : stratégie</div>
+          <div class="dp-section-desc">Quand c'est pertinent, quels biens choisir, et les erreurs à ne pas commettre.</div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:14px;">
+        <div class="card-title">🎯 Critères d'un bon achat</div>
+        <div style="display:flex;flex-direction:column;gap:7px;">
+          <div class="criteria-item"><div class="criteria-num">1</div><div class="criteria-body"><strong>Emplacement &gt; tout le reste</strong><span>Transports, bassin d'emploi, dynamisme locatif. Un bon emplacement = revente et location facilitées même en crise.</span></div></div>
+          <div class="criteria-item"><div class="criteria-num">2</div><div class="criteria-body"><strong>Bien "transformable"</strong><span>Potentiel de division, colocation, création de valeur. Un T3 en colocation peut générer +30–50% de rendement.</span></div></div>
+          <div class="criteria-item"><div class="criteria-num">3</div><div class="criteria-body"><strong>Travaux = levier de valeur</strong><span>La décote à l'achat + travaux bien calibrés crée de la valeur immédiate.</span></div></div>
+          <div class="criteria-item"><div class="criteria-num">4</div><div class="criteria-body"><strong>DPE correct</strong><span>Un mauvais DPE (F/G) = revente difficile + risque d'interdiction de location à terme.</span></div></div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:14px;">
+        <div class="card-title">📊 Cas concret : achat + travaux + valorisation</div>
+        <div class="ba-wrap">
+          <div class="ba-box before"><div class="ba-lbl">Achat</div><div class="ba-val" style="color:var(--text);font-size:16px;">300 000€</div><div class="ba-hint">Prix négocié · bien à rénover</div></div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><div class="ba-arrow">+</div><div style="font-size:11px;color:var(--yellow);">30k travaux</div></div>
+          <div class="ba-box after"><div class="ba-lbl">Valeur après travaux</div><div class="ba-val" style="color:var(--green);font-size:16px;">370 000€</div><div class="ba-hint">+40k€ de plus-value latente</div></div>
+        </div>
+        <div style="margin-top:9px;font-size:11.5px;color:var(--text-dim);padding:7px 11px;background:var(--surface2);border-radius:5px;">Après 3 ans en RP → mise en location → exonération plus-value possible à la revente : stratégie optimale RP → locatif.</div>
+      </div>
+
+      <div style="font-size:12px;font-weight:700;color:var(--text-muted);margin-bottom:9px;">⚠️ Pièges classiques</div>
+      <div class="g2" style="gap:8px;">
+        <div class="err-block"><div class="err-ico">❤️</div><div class="err-body"><strong>Surpayer un "coup de cœur"</strong><span>L'émotion est l'ennemie de la négociation. Fixez un prix max avant les visites.</span></div></div>
+        <div class="err-block"><div class="err-ico">💶</div><div class="err-body"><strong>Charges de copro sous-estimées</strong><span>Chauffage collectif, ascenseur, ravalement : vérifiez les PV d'AG sur 3 ans.</span></div></div>
+        <div class="err-block"><div class="err-ico">📍</div><div class="err-body"><strong>Mauvaise liquidité du marché</strong><span>Petite ville, zone peu dynamique : revente longue, prix qui stagnent.</span></div></div>
+        <div class="err-block"><div class="err-ico">🔋</div><div class="err-body"><strong>Ignorer le DPE</strong><span>Un logement F/G perdra de la valeur et pourra être interdit à la location.</span></div></div>
+      </div>
+    </div>
+
+    <hr class="dp-hr">
+
+    <!-- SECTION C : LOCATION -->
+    <div class="dp-section">
+      <div class="dp-section-head">
+        <div class="dp-section-icon" style="background:rgba(59,130,246,0.12);border:1px solid rgba(59,130,246,0.2);">🏢</div>
+        <div>
+          <div class="dp-section-title">C. Mise en location : choisir le bon statut</div>
+          <div class="dp-section-desc">LMNP, location nue, SCI : comparatif et exemple chiffré de l'amortissement LMNP réel.</div>
+        </div>
+      </div>
+
+      <div class="g3" style="margin-bottom:14px;">
+        <div class="statut-card statut-lmnp">
+          <div class="statut-name">LMNP</div>
+          <div class="statut-sub">Location Meublée Non Professionnelle</div>
+          <ul class="statut-list">
+            <li class="pro">Amortissement bien → base imposable quasi-nulle</li>
+            <li class="pro">Recettes jusqu'à 77 700€/an (meublé)</li>
+            <li class="pro">Régime réel : déduction charges + amortissement</li>
+            <li class="con">Cadre fiscal en évolution · surveiller les réformes</li>
+            <li class="con">Comptabilité conseillée au réel</li>
+          </ul>
+          <div class="statut-badge">⭐ Optimal dans 90% des cas</div>
+        </div>
+        <div class="statut-card statut-nue">
+          <div class="statut-name">Location nue</div>
+          <div class="statut-sub">Revenus fonciers classiques</div>
+          <ul class="statut-list">
+            <li class="pro">Simple administrativement</li>
+            <li class="pro">Micro-foncier si &lt;15 000€/an (abatt. 30%)</li>
+            <li class="con">Revenus fonciers imposés + prél. sociaux</li>
+            <li class="con">Pas d'amortissement possible</li>
+            <li class="con">Fiscalité lourde en TMI élevée</li>
+          </ul>
+          <div class="statut-badge">⚠️ Moins avantageux fiscalement</div>
+        </div>
+        <div class="statut-card statut-sci">
+          <div class="statut-name">SCI</div>
+          <div class="statut-sub">Société Civile Immobilière</div>
+          <ul class="statut-list">
+            <li class="pro">Achat à plusieurs (famille, associés)</li>
+            <li class="pro">Transmission facilitée par donations de parts</li>
+            <li class="pro">SCI IS : amortissement possible</li>
+            <li class="con">Comptabilité obligatoire · coûts de gestion</li>
+            <li class="con">Complexité administrative</li>
+          </ul>
+          <div class="statut-badge">→ Utile si investissement collectif</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">🔍 LMNP au réel : exemple chiffré de l'amortissement</div>
+        <div class="g2" style="gap:18px;align-items:start;">
+          <div>
+            <div style="font-size:12px;color:var(--text-muted);margin-bottom:11px;line-height:1.6;">Au régime réel, vous déduisez des recettes : les charges <strong>ET</strong> l'amortissement comptable du bien (étalement de sa valeur sur 25–30 ans, sans sortie de cash). Résultat : base imposable souvent nulle.</div>
+            <div class="lmnp-ex">
+              <div class="lmnp-row"><span class="lbl">Loyers annuels perçus</span><span class="val pos">+ 12 000€</span></div>
+              <div class="lmnp-row"><span class="lbl">Charges déductibles</span><span class="val neg">− 3 000€</span></div>
+              <div class="lmnp-row"><span class="lbl">Amortissement bien (sur 30 ans)</span><span class="val neg">− 7 000€</span></div>
+              <div class="lmnp-row total-row"><span class="lbl">Base imposable résultante</span><span class="val acc">= 2 000€</span></div>
+            </div>
+          </div>
+          <div>
+            <div style="font-size:12px;color:var(--text-muted);margin-bottom:9px;">Comparaison fiscale sur le même bien (TMI 30%) :</div>
+            <div style="display:flex;flex-direction:column;gap:8px;">
+              <div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:11px 13px;">
+                <div style="font-size:10px;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:3px;">Location nue (régime réel)</div>
+                <div style="font-size:17px;font-family:'Syne',sans-serif;font-weight:800;color:var(--red);">~3 600€/an</div>
+                <div style="font-size:11px;color:var(--text-dim);">Impôts + prélèvements sociaux</div>
+              </div>
+              <div style="background:var(--surface2);border:1px solid rgba(129,140,248,0.3);border-radius:8px;padding:11px 13px;">
+                <div style="font-size:10px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:3px;">LMNP réel</div>
+                <div style="font-size:17px;font-family:'Syne',sans-serif;font-weight:800;color:var(--green);">~0 – 600€/an</div>
+                <div style="font-size:11px;color:var(--text-dim);">Base imposable quasi-nulle grâce à l'amortissement</div>
+              </div>
+            </div>
+            <div style="margin-top:9px;font-size:11px;color:var(--text-dim);font-style:italic;padding:7px 11px;background:var(--surface2);border-radius:5px;">⚠️ Cadre fiscal susceptible d'évoluer. Chiffres illustratifs. Consultez un expert-comptable.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA Simulateur -->
+    <div class="dp-cta">
+      <div>
+        <div class="dp-cta-title">🔢 Simuler votre projet maintenant</div>
+        <div class="dp-cta-desc">Cash-flow, rendement brut/net, fiscalité estimée et verdict intelligent selon vos données réelles.</div>
+      </div>
+      <button class="btn-cta" onclick="goTo('sim')">Lancer le simulateur →</button>
+    </div>
+  </div>
+</div><!-- /page-deep -->
+
+<!-- ============================================================
+     PAGE SIMULATEUR
+============================================================ -->
+<div class="page" id="page-sim">
+  <nav class="inner-nav">
+    <div class="inner-nav-back" onclick="goTo('home')">← Retour cheatsheet</div>
+    <div class="inner-nav-sep">·</div>
+    <div class="inner-nav-title">🔢 Simulateur interactif</div>
+    <div class="inner-nav-switch" onclick="goTo('deep')">📖 Voir l'approfondissement →</div>
+  </nav>
+
+  <div class="sim-container">
+    <div class="sim-header">
+      <div class="dp-tag">🔢 Simulateur interactif</div>
+      <div class="dp-title">Calculez votre <span>projet immobilier</span></div>
+      <div class="dp-sub">Renseignez les paramètres. Le simulateur calcule en temps réel cash-flow, rendement et fiscalité.</div>
+    </div>
+
+    <div class="sim-layout">
+      <!-- INPUTS -->
+      <div>
+        <div class="card" style="margin-bottom:12px;">
+          <div class="card-title">🏠 Stratégie</div>
+          <div class="mode-sel">
+            <button class="mode-btn active" id="mode-lmnp" onclick="setMode('lmnp')">LMNP réel</button>
+            <button class="mode-btn" id="mode-nue" onclick="setMode('nue')">Location nue</button>
+            <button class="mode-btn" id="mode-rp" onclick="setMode('rp')">Résidence principale</button>
+          </div>
+
+          <div class="sec-div">Acquisition</div>
+          <div class="input-group"><div class="input-label">Prix du bien</div><div class="input-suffix"><input type="number" id="i-prix" value="250000" oninput="calculate()"><span class="suf">€</span></div></div>
+          <div class="input-group"><div class="input-label">Apport personnel</div><div class="input-suffix"><input type="number" id="i-apport" value="50000" oninput="calculate()"><span class="suf">€</span></div></div>
+          <div class="input-group"><div class="input-label">Frais de notaire</div><div class="input-suffix"><input type="number" id="i-notaire" value="8" oninput="calculate()"><span class="suf">%</span></div></div>
+          <div class="input-group"><div class="input-label">Travaux</div><div class="input-suffix"><input type="number" id="i-travaux" value="0" oninput="calculate()"><span class="suf">€</span></div></div>
+
+          <div class="sec-div">Crédit</div>
+          <div class="input-group"><div class="input-label">Taux d'intérêt</div><div class="input-suffix"><input type="number" id="i-taux" value="3.5" step="0.1" oninput="calculate()"><span class="suf">%</span></div></div>
+          <div class="input-group"><div class="input-label">Durée du prêt</div><div class="input-suffix"><input type="number" id="i-duree" value="20" oninput="calculate()"><span class="suf">ans</span></div></div>
+          <div class="input-group"><div class="input-label">Assurance crédit</div><div class="input-suffix"><input type="number" id="i-assurance" value="0.20" step="0.05" oninput="calculate()"><span class="suf">% / an</span></div></div>
+
+          <div id="loc-inputs">
+            <div class="sec-div">Location</div>
+            <div class="input-group"><div class="input-label">Loyer mensuel estimé</div><div class="input-suffix"><input type="number" id="i-loyer" value="900" oninput="calculate()"><span class="suf">€/mois</span></div></div>
+            <div class="input-group"><div class="input-label">Charges annuelles</div><div class="input-suffix"><input type="number" id="i-charges" value="2500" oninput="calculate()"><span class="suf">€/an</span></div></div>
+            <div class="input-group"><div class="input-label">Taux de vacance</div><div class="input-suffix"><input type="number" id="i-vacance" value="5" oninput="calculate()"><span class="suf">%</span></div></div>
+            <div class="input-group" id="tmi-grp"><div class="input-label">Tranche marginale (TMI)</div><div class="input-suffix"><input type="number" id="i-tmi" value="30" oninput="calculate()"><span class="suf">%</span></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RESULTS -->
+      <div id="results"></div>
+    </div>
+  </div>
+</div><!-- /page-sim -->
+
+<script>
+// ============================================================
+// NAVIGATION
+// ============================================================
+function goTo(page) {
+  closeModal();
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + page).classList.add('active');
+  window.scrollTo(0, 0);
+  if (page === 'sim') { setMode(currentMode); calculate(); }
+}
+
+function openModal() {
+  document.getElementById('modal').classList.add('open');
+}
+function closeModal() {
+  document.getElementById('modal').classList.remove('open');
+}
+document.getElementById('modal').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+
+// ============================================================
+// SIMULATOR
+// ============================================================
+let currentMode = 'lmnp';
+
+function setMode(mode) {
+  currentMode = mode;
+  document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+  const btn = document.getElementById('mode-' + mode);
+  if (btn) btn.classList.add('active');
+  const locInputs = document.getElementById('loc-inputs');
+  const tmiGrp = document.getElementById('tmi-grp');
+  if (locInputs) locInputs.style.display = mode === 'rp' ? 'none' : 'block';
+  if (tmiGrp) tmiGrp.style.display = mode === 'nue' ? 'block' : 'none';
+  calculate();
+}
+
+function v(id) { return parseFloat(document.getElementById(id)?.value) || 0; }
+function eur(n) {
+  const s = n < 0 ? '-' : '';
+  return s + Math.abs(Math.round(n)).toLocaleString('fr-FR') + ' €';
+}
+function pct(n) { return n.toFixed(2).replace('.', ',') + ' %'; }
+
+function mensualite(capital, tauxAnnuel, dureeAns) {
+  const r = tauxAnnuel / 100 / 12;
+  const n = dureeAns * 12;
+  if (r === 0) return capital / n;
+  return capital * r * Math.pow(1 + r, n) / (Math.pow(1 + r, n) - 1);
+}
+
+function calculate() {
+  const resultsEl = document.getElementById('results');
+  if (!resultsEl) return;
+
+  const prix = v('i-prix'), apport = v('i-apport'), notPct = v('i-notaire');
+  const travaux = v('i-travaux'), taux = v('i-taux'), duree = v('i-duree');
+  const assPct = v('i-assurance');
+
+  const notaire = prix * notPct / 100;
+  const coutTotal = prix + notaire + travaux;
+  const capital = Math.max(0, coutTotal - apport);
+  const mCredit = mensualite(capital, taux, duree);
+  const mAss = capital * assPct / 100 / 12;
+  const mTotal = mCredit + mAss;
+  const interets = mCredit * duree * 12 - capital;
+
+  let html = '';
+
+  if (currentMode === 'rp') {
+    html = `
+      <div class="res-card" style="background:rgba(34,197,94,0.06);border-color:rgba(34,197,94,0.2);">
+        <div class="card-title">🏡 Résidence principale</div>
+        <div class="res-grid">
+          <div class="res-mini"><div class="res-label">Capital emprunté</div><div class="res-value neu">${eur(capital)}</div></div>
+          <div class="res-mini"><div class="res-label">Mensualité totale</div><div class="res-value neg">${eur(mTotal)}/mois</div></div>
+          <div class="res-mini"><div class="res-label">Coût total crédit</div><div class="res-value neg">${eur(interets)}</div></div>
+          <div class="res-mini"><div class="res-label">Coût acquisition</div><div class="res-value neu">${eur(coutTotal)}</div></div>
+        </div>
+      </div>
+      <div class="bkd">
+        <div class="card-title">Décomposition acquisition</div>
+        <div class="bkd-row"><span class="bl">Prix du bien</span><span class="bv">${eur(prix)}</span></div>
+        <div class="bkd-row"><span class="bl">Frais de notaire (${notPct}%)</span><span class="bv neg">${eur(notaire)}</span></div>
+        <div class="bkd-row"><span class="bl">Travaux</span><span class="bv neg">${eur(travaux)}</span></div>
+        <div class="bkd-row"><span class="bl">Apport</span><span class="bv pos">${eur(apport)}</span></div>
+        <div class="bkd-row btot"><span class="bl">Capital à emprunter</span><span class="bv neu">${eur(capital)}</span></div>
+      </div>
+      <div class="bkd">
+        <div class="card-title">Décomposition mensualité</div>
+        <div class="bkd-row"><span class="bl">Remboursement crédit</span><span class="bv neg">${eur(mCredit)}/mois</span></div>
+        <div class="bkd-row"><span class="bl">Assurance (${assPct}%)</span><span class="bv neg">${eur(mAss)}/mois</span></div>
+        <div class="bkd-row btot"><span class="bl">Effort mensuel total</span><span class="bv neg">${eur(mTotal)}/mois</span></div>
+      </div>
+      ${verdictRP(mTotal, capital, prix)}
+      <div style="margin-top:10px;display:flex;gap:8px;">
+        <button onclick="setMode('lmnp')" style="flex:1;padding:9px;background:var(--surface2);border:1px solid var(--border2);border-radius:7px;color:var(--text-muted);font-size:11.5px;cursor:pointer;font-family:'DM Sans',sans-serif;">Comparer LMNP</button>
+        <button onclick="setMode('nue')" style="flex:1;padding:9px;background:var(--surface2);border:1px solid var(--border2);border-radius:7px;color:var(--text-muted);font-size:11.5px;cursor:pointer;font-family:'DM Sans',sans-serif;">Comparer loc. nue</button>
+      </div>`;
+  } else {
+    const loyer = v('i-loyer'), charges = v('i-charges'), vacPct = v('i-vacance'), tmi = v('i-tmi');
+    const loyersBruts = loyer * 12;
+    const loyersEff = loyersBruts * (1 - vacPct / 100);
+    const amortAnnuel = currentMode === 'lmnp' ? (prix * 0.85) / 30 : 0;
+    let baseImp = 0, impot = 0;
+
+    if (currentMode === 'nue') {
+      baseImp = loyersEff < 15000 ? loyersEff * 0.7 : Math.max(0, loyersEff - charges);
+      impot = baseImp * (tmi / 100 + 0.172);
+    } else {
+      baseImp = Math.max(0, loyersEff - charges - amortAnnuel);
+      impot = baseImp > 0 ? baseImp * (0.20 + 0.172) : 0;
+    }
+
+    const rBrut = loyersBruts / prix * 100;
+    const rNet = (loyersEff - charges) / prix * 100;
+    const rNetFisc = (loyersEff - charges - impot) / prix * 100;
+    const cfAnnuel = loyersEff - charges - impot - mTotal * 12;
+    const cfMensuel = cfAnnuel / 12;
+    const cfCls = cfMensuel >= 0 ? 'pos' : 'neg';
+
+    html = `
+      <div class="res-card">
+        <div class="res-label">Cash-flow mensuel net</div>
+        <div class="res-value ${cfCls}">${eur(cfMensuel)}/mois</div>
+        <div class="res-sub">Loyers perçus − charges − mensualité crédit${currentMode === 'lmnp' ? ' (LMNP réel)' : ''}</div>
+      </div>
+      <div class="res-grid">
+        <div class="res-mini"><div class="res-label">Rendement brut</div><div class="res-value neu">${pct(rBrut)}</div></div>
+        <div class="res-mini"><div class="res-label">Net de charges</div><div class="res-value neu">${pct(rNet)}</div></div>
+        <div class="res-mini"><div class="res-label">Net fiscal</div><div class="res-value pos">${pct(rNetFisc)}</div></div>
+        <div class="res-mini"><div class="res-label">Impôts estimés</div><div class="res-value ${impot > 0 ? 'neg' : 'pos'}">${eur(impot)}/an</div></div>
+      </div>
+      <div class="bkd">
+        <div class="card-title">Flux annuels détaillés</div>
+        <div class="bkd-row"><span class="bl">Loyers bruts</span><span class="bv pos">${eur(loyersBruts)}</span></div>
+        <div class="bkd-row"><span class="bl">Impact vacance (${vacPct}%)</span><span class="bv neg">${eur(loyersBruts - loyersEff)}</span></div>
+        <div class="bkd-row"><span class="bl">Charges annuelles</span><span class="bv neg">${eur(charges)}</span></div>
+        ${currentMode === 'lmnp' ? `<div class="bkd-row"><span class="bl">Amortissement (fiscal, non cash)</span><span class="bv acc">${eur(amortAnnuel)}</span></div>` : ''}
+        <div class="bkd-row"><span class="bl">Base imposable</span><span class="bv">${eur(baseImp)}</span></div>
+        <div class="bkd-row"><span class="bl">Impôts estimés</span><span class="bv neg">${eur(impot)}</span></div>
+        <div class="bkd-row"><span class="bl">Mensualités crédit + assurance</span><span class="bv neg">${eur(mTotal * 12)}</span></div>
+        <div class="bkd-row btot"><span class="bl">Cash-flow net annuel</span><span class="bv ${cfCls}">${eur(cfAnnuel)}</span></div>
+      </div>
+      ${compareBar(rBrut, rNet, rNetFisc)}
+      ${verdictLoc(cfMensuel, rBrut, rNetFisc, currentMode)}
+      <div style="font-size:10.5px;color:var(--text-dim);font-style:italic;padding:9px 13px;background:var(--surface);border:1px solid var(--border);border-radius:8px;margin-top:4px;">⚠️ Estimations indicatives. Amortissement LMNP : 85% du prix / 30 ans linéaire. Consultez un expert-comptable pour votre situation.</div>`;
+  }
+
+  resultsEl.innerHTML = html;
+}
+
+function verdictRP(mensualite, capital, prix) {
+  let cls = 'good', emoji = '✅', title = 'Financement viable';
+  let body = `Mensualité de ${eur(mensualite)}/mois : un effort d'épargne forcée pour bâtir votre patrimoine immobilier.`;
+  let pts = ['Pas d\'impôt sur plus-value si résidence principale depuis 2+ ans', 'Comparez avec le coût d\'un loyer équivalent dans la même zone', 'Après quelques années, envisagez la stratégie RP → locatif (LMNP)'];
+  if (capital > prix * 0.95) { cls = 'warn'; emoji = '⚠️'; title = 'Apport à renforcer'; body = 'Votre apport est faible par rapport au coût total. Envisagez d\'allonger la durée ou de réduire le prix cible.'; }
+  if (mensualite > 3500) { cls = 'warn'; emoji = '⚠️'; title = 'Effort mensuel élevé'; body = `Mensualité de ${eur(mensualite)} conséquente. Vérifiez que le taux d'endettement ne dépasse pas 35% des revenus nets.`; }
+  return `<div class="verdict ${cls}"><div class="vd-head"><div class="vd-emoji">${emoji}</div><div class="vd-title">${title}</div></div><div class="vd-body">${body}</div><div class="vd-pts">${pts.map(p=>`<div class="vd-pt">${p}</div>`).join('')}</div></div>`;
+}
+
+function compareBar(brut, net, netF) {
+  const mx = Math.max(brut, net, netF, 5);
+  return `<div class="cmp-bar"><div class="cmp-title">Comparaison des rendements</div>
+    <div class="cmp-row"><div class="cmp-lbl">Brut</div><div class="cmp-track"><div class="cmp-fill" style="width:${Math.min(100,brut/mx*100)}%;background:var(--blue)"></div></div><div class="cmp-val" style="color:var(--blue)">${pct(brut)}</div></div>
+    <div class="cmp-row"><div class="cmp-lbl">Net charges</div><div class="cmp-track"><div class="cmp-fill" style="width:${Math.min(100,net/mx*100)}%;background:var(--yellow)"></div></div><div class="cmp-val" style="color:var(--yellow)">${pct(net)}</div></div>
+    <div class="cmp-row"><div class="cmp-lbl">Net fiscal</div><div class="cmp-track"><div class="cmp-fill" style="width:${Math.min(100,netF/mx*100)}%;background:var(--green)"></div></div><div class="cmp-val" style="color:var(--green)">${pct(netF)}</div></div>
+  </div>`;
+}
+
+function verdictLoc(cf, rBrut, rNF, mode) {
+  let cls, emoji, title, body, pts;
+  if (cf >= 100) {
+    cls='good'; emoji='🏆'; title='Cash-flow positif — projet solide';
+    body=`Votre investissement génère ${eur(cf)}/mois de cash-flow positif. Le locataire rembourse votre crédit et vous dégagez un surplus.`;
+    pts=['Vérifiez la solidité de la demande locative locale', mode==='lmnp'?'En LMNP réel, tenez une comptabilité précise pour optimiser l\'amortissement':'Comparez avec le LMNP pour voir le gain fiscal potentiel','Constituez une réserve de trésorerie pour les imprévus (5% des loyers)'];
+  } else if (cf >= -150) {
+    cls='warn'; emoji='⚖️'; title='Cash-flow légèrement négatif — acceptable';
+    body=`${eur(Math.abs(cf))}/mois d'effort supplémentaire. Tolérable si le bien est bien placé et le rendement suffisant.`;
+    pts=['Allongez la durée du prêt pour améliorer le cash-flow', mode==='lmnp'?'L\'avantage fiscal LMNP compense souvent sur l\'année':'Passez en LMNP réel pour réduire significativement l\'impôt','Le potentiel de plus-value à terme peut compenser cet effort'];
+  } else {
+    cls='bad'; emoji='⚠️'; title='Cash-flow très négatif — à retravailler';
+    body=`Effort de ${eur(Math.abs(cf))}/mois trop important. Ce projet nécessite d'être revu : prix, loyer, durée ou fiscalité.`;
+    pts=['Négociez le prix ou cherchez un meilleur rendement brut (>5%)','Allongez la durée du prêt pour réduire les mensualités', mode==='nue'?'Envisagez sérieusement le LMNP pour réduire la charge fiscale':'Vérifiez que charges et vacance sont bien estimées'];
+  }
+  if (rBrut < 4) pts.push('Rendement brut < 4% : niveau faible pour un investissement locatif en France');
+  return `<div class="verdict ${cls}"><div class="vd-head"><div class="vd-emoji">${emoji}</div><div class="vd-title">${title}</div></div><div class="vd-body">${body}</div><div class="vd-pts">${pts.map(p=>`<div class="vd-pt">${p}</div>`).join('')}</div></div>`;
+}
+
+// Init
+setMode('lmnp');
+</script>
+</body>
+</html>
